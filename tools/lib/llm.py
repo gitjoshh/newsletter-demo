@@ -33,8 +33,26 @@ def _client():
     except ImportError:
         fail("The 'anthropic' package is not installed (pip install -r requirements.txt)")
     load_env()
-    # Cloud routine environments strip ANTHROPIC_API_KEY, so accept a fallback name.
-    key = os.getenv("ANTHROPIC_API_KEY") or os.getenv("RFYL_ANTHROPIC_KEY")
+    # Cloud routine environments strip a var named exactly ANTHROPIC_API_KEY, so
+    # accept several fallback names (and a couple of likely typos).
+    key = next(
+        (
+            v
+            for v in (
+                os.getenv(n)
+                for n in (
+                    "ANTHROPIC_API_KEY",
+                    "RFYL_ANTHROPIC_KEY",
+                    "RYFL_ANTHROPIC_KEY",
+                    "RFYL_ANTHROPIC_API_KEY",
+                    "ANTHROPIC_KEY",
+                    "LLM_API_KEY",
+                )
+            )
+            if v
+        ),
+        None,
+    )
     if key:
         return anthropic.Anthropic(api_key=key)
     # No explicit key: let the SDK resolve ambient credentials (e.g. an
