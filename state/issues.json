@@ -1,12 +1,1 @@
-[
-  {
-    "issue_id": "2026-08-26-pending",
-    "rushes_msg_id": "1a03e4dac3fc0960",
-    "approval_thread_id": null,
-    "status": "failed",
-    "revision_count": 0,
-    "post_url": null,
-    "error": "ANTHROPIC_API_KEY missing - tools/find_horror_angle.py cannot run",
-    "failed_at": "2026-08-27T17:32:00.076823"
-  }
-]
+[]
