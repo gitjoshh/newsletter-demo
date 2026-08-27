@@ -22,12 +22,12 @@ SCHEMA = """{
   "subtitle": "one-line standfirst",
   "slug": "kebab-case-url-slug",
   "excerpt": "2-3 sentence summary for the site index and RSS",
-  "tags": ["horror", "running", "roundup"],
-  "intro_md": "opening section in Markdown - personal, sets up the week, names the running+horror lens",
+  "tags": ["horror", "boxing", "running"],
+  "intro_md": "opening section in Markdown - personal, sets up the week, names the boxing/running + horror lens",
   "film_blurbs": [
-    {"title": "Film (Year)", "body_md": "2-4 short paragraphs in Josh's voice; may reference the tone of the Letterboxd reviews without quoting them; work in a running or endurance thread where it fits"}
+    {"title": "Film (Year)", "body_md": "2-4 short paragraphs in Josh's own voice about a film he is engaging with this week; work in a boxing or running/endurance thread where it fits"}
   ],
-  "horror_deepdive": {"title": "section heading", "body_md": "the longer horror-angle piece built from horror_angle.json; grounded, cites facts inline as Markdown links; ties explicitly to running/endurance/escape"},
+  "horror_deepdive": {"title": "section heading", "body_md": "the longer horror-angle piece built from horror_angle.json; grounded, cites facts inline as Markdown links; ties explicitly to boxing / rounds / going the distance / running / endurance"},
   "closing_md": "short sign-off in the style of the reference post (e.g. 'See you next Friday')",
   "sources": [{"text": "what it supports", "url": "https://..."}],
   "image_queries": ["1-2 stock-photo phrases for the deep-dive's running/endurance MOOD photo only - concrete, evocative, NOT film scenes (e.g. 'runner on a dark forest trail at dusk'). Film scene stills are sourced separately from TMDB."]
@@ -42,22 +42,31 @@ def system_prompt(cfg: dict) -> str:
     n_films = structure.get("roundup_film_count", 4)
     return f"""You write "Run For Your Life", a weekly personal newsletter by Joshua Laurie \
 about the intersection of combat/endurance training - mainly BOXING, which he does every \
-day - and horror movies. You are writing this week's blog post as a roundup of the week's \
-popular films on Letterboxd, plus one deeper horror-angle deep-dive.
+day, with running/cardio as the constant adjacent thread - and horror movies. You are \
+writing this week's blog post: a handful of films Josh is engaging with this week, plus one \
+deeper horror-angle deep-dive.
+
+SOURCING RULE (critical): the film list is derived from a third-party service, but that is \
+invisible to the reader. NEVER mention Letterboxd, "Rushes", a digest, "popular reviews", \
+star ratings from other users, "the community", or any hint that this was scraped or \
+aggregated. Do not quote or attribute other people's reviews. The reviewer names and review \
+excerpts you are given are private signal about what is landing - use them only to gauge \
+mood, never on the page. Every take is Josh's own.
 
 Voice:
 {notes}
 
 Structure:
-- Personal intro that frames the week through the boxing (or running/cardio) + horror lens. \
-Open with a specific, lived training detail - a round on the bag, footwork drills, a \
-sparring session, the walk to the gym.
-- About {n_films} short film blurbs drawn from the week's popular films / popular reviews. \
-Where it fits naturally, thread a boxing or training observation through a blurb.
+- Personal intro that frames the week through the boxing + running + horror lens. Open with \
+a specific, lived training detail - a round on the bag, footwork drills, a sparring session, \
+a dawn run, the walk to the gym.
+- About {n_films} short film blurbs, each on a film Josh is thinking about this week, in his \
+own voice. Thread a boxing or running/endurance observation through a blurb where it fits.
 - One "horror_deepdive" section built from the supplied horror angle - the longest section, \
-in the style of the reference notes: grounded, specific, cites real facts as inline Markdown \
-links, and ties explicitly back to boxing / rounds / taking punishment / going the distance \
-/ the journeyman grind (or running/endurance where that is the stronger fit).
+in the style of the reference notes: grounded, specific, cites real facts about the film as \
+inline Markdown links, and ties explicitly back to boxing / rounds / taking punishment / \
+going the distance / the journeyman grind (or running/endurance where that is the stronger \
+fit).
 - A short sign-off.
 - Target {lo}-{hi} words total. Markdown only in the *_md fields. No headings inside \
 intro_md or blurb bodies (the site template adds them). Be consistent in spelling. \
@@ -72,14 +81,19 @@ Respond with ONLY a JSON object in a ```json fenced block matching this schema:
 
 def user_prompt(rushes: dict, horror: dict, revision: str | None, prev: dict | None) -> str:
     parts = [
-        "PARSED RUSHES DIGEST:",
+        "INTERNAL SIGNAL for this week (do NOT surface any of this framing or attribute "
+        "anything to anyone - it only tells you which films to write about and the general "
+        "mood around them):",
         json.dumps(
             {
                 "week_of": rushes.get("week_of"),
-                "popular_films": rushes.get("popular_films", []),
-                "popular_reviews": rushes.get("popular_reviews", []),
-                "popular_lists": [
-                    {k: l.get(k) for k in ("title", "curator", "excerpt", "sample_films")}
+                "films_in_play": rushes.get("popular_films", []),
+                "mood_notes": [
+                    {"title": r.get("title"), "year": r.get("year"), "gist": r.get("excerpt")}
+                    for r in rushes.get("popular_reviews", [])
+                ],
+                "adjacent_lists": [
+                    {k: l.get(k) for k in ("title", "excerpt", "sample_films")}
                     for l in rushes.get("popular_lists", [])
                 ],
             },

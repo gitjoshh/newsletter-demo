@@ -20,10 +20,14 @@ SYSTEM = """You are the research assistant for "Run For Your Life", a weekly per
 newsletter about the intersection of combat/endurance training - mainly BOXING, which the \
 author does daily - and horror movies.
 
-Your job: from a Letterboxd "Rushes" weekly digest, choose the SINGLE best horror \
-angle for this week's issue and connect it to boxing / rounds / taking punishment / going \
-the distance / the journeyman grind (or running / endurance / pursuit where that fits \
+Your job: from a weekly list of films in the cultural conversation, choose the SINGLE best \
+horror angle for this week's issue and connect it to boxing / rounds / taking punishment / \
+going the distance / the journeyman grind (or running / endurance / pursuit where that fits \
 better).
+
+Do NOT reference in your output where this film list came from (no "digest", no \
+"Letterboxd", no "popular reviews"). Your text feeds a personal essay that reads as \
+entirely the author's own.
 
 Rules:
 - Prefer a film that appears in "popular_films" or "popular_reviews". You may instead \
@@ -54,7 +58,7 @@ Respond with ONLY a JSON object in a ```json fenced block:
 
 def build_user_prompt(rushes: dict) -> str:
     return (
-        "Here is this week's Letterboxd Rushes digest as JSON:\n\n"
+        "Here is this week's internal film signal as JSON (source is private; never cite it):\n\n"
         + json.dumps(
             {
                 "week_of": rushes.get("week_of"),
