@@ -21,6 +21,13 @@ TIMEOUT = 20
 API = "https://api.themoviedb.org/3"
 IMG_BASE = "https://image.tmdb.org/t/p/w1280"
 
+# Diagnostics: find_still appends a one-line reason here when it returns nothing.
+ERRORS: list[str] = []
+
+
+def _note(msg: str) -> None:
+    ERRORS.append(f"tmdb: {msg}")
+
 
 def _auth() -> tuple[dict, dict]:
     """Return (params, headers) for whichever credential is set."""
@@ -46,6 +53,7 @@ def _parse_title_year(text: str) -> tuple[str, str | None]:
 
 def find_still(title_or_titleyear: str, year: str | None = None) -> dict | None:
     if not _enabled():
+        _note("TMDB_API_KEY / TMDB_READ_TOKEN not set")
         return None
     params_auth, headers = _auth()
     title, y2 = _parse_title_year(title_or_titleyear)
@@ -59,6 +67,7 @@ def find_still(title_or_titleyear: str, year: str | None = None) -> dict | None:
         r.raise_for_status()
         results = r.json().get("results", [])
         if not results:
+            _note(f"no film match for {title!r}")
             return None
         movie = results[0]
         mid = movie["id"]
@@ -71,10 +80,18 @@ def find_still(title_or_titleyear: str, year: str | None = None) -> dict | None:
         )
         ri.raise_for_status()
         backdrops = ri.json().get("backdrops", [])
-    except (requests.RequestException, ValueError, KeyError):
+    except requests.HTTPError as e:
+        _note(f"HTTP {e.response.status_code} for {title!r} ({e.response.text[:120]})")
+        return None
+    except requests.RequestException as e:
+        _note(f"request failed for {title!r} ({type(e).__name__}: {e})")
+        return None
+    except (ValueError, KeyError) as e:
+        _note(f"bad response for {title!r} ({e})")
         return None
 
     if not backdrops:
+        _note(f"no backdrops for {title!r}")
         return None
 
     # Prefer textless (iso_639_1 is None), then higher rating, then wider.

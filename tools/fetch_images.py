@@ -20,8 +20,18 @@ from pathlib import Path
 import requests
 
 from lib.common import emit, fail, load_env, tmp_path
+from lib import images as images_mod
+from lib import tmdb as tmdb_mod
 from lib.images import find_image, ping_unsplash_download
 from lib.tmdb import find_still
+
+
+def _source_errors() -> list[str]:
+    """De-duplicated diagnostics collected by the image adapters this run."""
+    seen: dict[str, None] = {}
+    for e in tmdb_mod.ERRORS + images_mod.ERRORS:
+        seen.setdefault(e, None)
+    return list(seen)
 
 MAX_WIDTH = 1600
 UA = "run-for-your-life-newsletter/1.0"
@@ -138,7 +148,9 @@ def main() -> None:
         warnings.append("no stock mood photo found for the deep-dive")
 
     if not images:
-        fail("Could not source any images. Check TMDB_API_KEY / PEXELS_API_KEY / UNSPLASH_ACCESS_KEY.")
+        diag = _source_errors()
+        detail = "\n  - " + "\n  - ".join(diag) if diag else " (no diagnostics captured)"
+        fail("Could not source any images. Per-source reasons:" + detail)
 
     hero_index = next((i for i, im in enumerate(images) if im["role"] == "hero"), 0)
     teaser_index = next(
@@ -164,6 +176,7 @@ def main() -> None:
             "by_source": {s: sum(1 for i in images if i["source"] == s) for s in {i["source"] for i in images}},
             "teaser_is_stock": images[teaser_index]["kind"] == "stock",
             "warnings": warnings,
+            "source_notes": _source_errors(),
         }
     )
 

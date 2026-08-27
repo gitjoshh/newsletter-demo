@@ -29,6 +29,13 @@ import requests
 TIMEOUT = 20
 UA = "run-for-your-life-newsletter/1.0 (+https://letterboxd.com/joshualaurie)"
 
+# Diagnostics: each search_* appends a one-line reason here when it comes back empty.
+ERRORS: list[str] = []
+
+
+def _note(src: str, msg: str) -> None:
+    ERRORS.append(f"{src}: {msg}")
+
 
 def _get(url: str, **kw) -> requests.Response:
     headers = kw.pop("headers", {})
@@ -85,9 +92,15 @@ def search_openverse(query: str) -> dict | None:
         )
         r.raise_for_status()
         results = r.json().get("results", [])
-    except (requests.RequestException, ValueError):
+    except requests.RequestException as e:
+        _note("openverse", f"request failed ({type(e).__name__}: {e})")
+        return None
+    except ValueError as e:
+        _note("openverse", f"bad JSON ({e})")
         return None
 
+    if not results:
+        _note("openverse", f"0 results for {query!r}")
     for it in results:
         img = it.get("url")
         if not img:
@@ -120,6 +133,7 @@ def search_openverse(query: str) -> dict | None:
 def search_pexels(query: str) -> dict | None:
     key = os.getenv("PEXELS_API_KEY")
     if not key:
+        _note("pexels", "PEXELS_API_KEY not set")
         return None
     try:
         r = _get(
@@ -129,9 +143,17 @@ def search_pexels(query: str) -> dict | None:
         )
         r.raise_for_status()
         photos = r.json().get("photos", [])
-    except (requests.RequestException, ValueError):
+    except requests.HTTPError as e:
+        _note("pexels", f"HTTP {e.response.status_code} ({e.response.text[:120]})")
+        return None
+    except requests.RequestException as e:
+        _note("pexels", f"request failed ({type(e).__name__}: {e})")
+        return None
+    except ValueError as e:
+        _note("pexels", f"bad JSON ({e})")
         return None
     if not photos:
+        _note("pexels", f"0 results for {query!r}")
         return None
     p = photos[0]
     src = p.get("src", {})
@@ -157,6 +179,7 @@ def search_pexels(query: str) -> dict | None:
 def search_unsplash(query: str) -> dict | None:
     key = os.getenv("UNSPLASH_ACCESS_KEY")
     if not key:
+        _note("unsplash", "UNSPLASH_ACCESS_KEY not set")
         return None
     try:
         r = _get(
@@ -166,9 +189,17 @@ def search_unsplash(query: str) -> dict | None:
         )
         r.raise_for_status()
         results = r.json().get("results", [])
-    except (requests.RequestException, ValueError):
+    except requests.HTTPError as e:
+        _note("unsplash", f"HTTP {e.response.status_code} ({e.response.text[:120]})")
+        return None
+    except requests.RequestException as e:
+        _note("unsplash", f"request failed ({type(e).__name__}: {e})")
+        return None
+    except ValueError as e:
+        _note("unsplash", f"bad JSON ({e})")
         return None
     if not results:
+        _note("unsplash", f"0 results for {query!r}")
         return None
     p = results[0]
     urls, links, user = p.get("urls", {}), p.get("links", {}), p.get("user", {})
