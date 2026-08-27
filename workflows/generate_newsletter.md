@@ -36,8 +36,9 @@ In execution order (all run from the project root, all print one JSON object):
 5. `tools/fetch_images.py --draft draft.json --horror horror_angle.json --mood-count 1 --out-dir state/issues/<id>/images --out .../images.json` — TMDB scene stills (hero + one per film blurb) + one stock running/mood photo for the deep-dive
 6. `tools/build_preview.py --draft draft.json --images images.json --out .../preview.html`
 7. `tools/classify_reply.py --thread-text <reply.txt>` — on an approval reply
-8. `tools/publish_site.py --draft draft.json --images images.json --teaser teaser.json --deploy wrangler` — on approve; builds the site and runs `npx wrangler pages deploy public/`
+8. `tools/publish_site.py --draft draft.json --images images.json --teaser teaser.json --deploy wrangler --push` — on approve; builds the site, `npx wrangler pages deploy public/`, and pushes `content/` so the post survives the next fresh checkout
 9. `tools/render_ready_email.py --teaser teaser.json --images images.json --url <post_url> --title "<title>"` — on approve; the teaser photo it names is a stock/CC image (safer to post than a studio still)
+10. `tools/state_sync.py -m "<what changed>" [--done <issue_id>]` — after EVERY state change; commits + pushes `state/` so the next scheduled run sees it
 
 Gmail send/read is done by the routine itself through the Gmail connection, not a tool.
 
