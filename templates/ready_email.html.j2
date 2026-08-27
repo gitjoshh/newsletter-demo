@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><style>{{ style_css }}</style></head>
+<body>
+<div class="wrap">
+  <div class="masthead">{{ site.title }}</div>
+  <h1>Ready to post</h1>
+  <p class="subtitle">"{{ post_title }}" is live.</p>
+
+  <p><strong>Live URL:</strong> <a href="{{ post_url }}">{{ post_url }}</a></p>
+
+  <p>Copy the teaser below, then post it to Facebook / Threads with the photo attached to this email.</p>
+  <div class="copybox">{{ teaser_text }}</div>
+
+  {% if teaser_image %}
+  <figure>
+    <img src="{{ teaser_image.src }}" alt="{{ teaser_image.alt }}">
+    <figcaption>Attached: {{ teaser_image.filename }} &middot; {{ teaser_image.attribution_html | safe }}</figcaption>
+  </figure>
+  {% endif %}
+</div>
+</body>
+</html>

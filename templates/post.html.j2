@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="{{ site.language | default('en') }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ post.title }} - {{ site.title }}</title>
+<meta name="description" content="{{ post.excerpt }}">
+<style>{{ style_css }}</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead"><a href="{{ site.base_url }}/">{{ site.title }}</a></div>
+  <article>
+    <h1>{{ post.title }}</h1>
+    {% if post.subtitle %}<p class="subtitle">{{ post.subtitle }}</p>{% endif %}
+    <div class="meta">
+      {{ post.date }} &middot; {{ site.author }}
+      {% if post.tags %}<div style="margin-top:.5em">{% for t in post.tags %}<span class="tag">{{ t }}</span>{% endfor %}</div>{% endif %}
+    </div>
+
+    {% if post.hero %}
+    <figure>
+      <img src="{{ post.hero.src }}" alt="{{ post.hero.alt }}">
+      <figcaption>{{ post.hero.attribution_html | safe }}</figcaption>
+    </figure>
+    {% endif %}
+
+    {{ post.intro_html | safe }}
+
+    {% for b in post.blurbs %}
+    <h2>{{ b.title }}</h2>
+    {% if b.image %}
+    <figure>
+      <img src="{{ b.image.src }}" alt="{{ b.image.alt }}">
+      <figcaption>{{ b.image.attribution_html | safe }}</figcaption>
+    </figure>
+    {% endif %}
+    {{ b.body_html | safe }}
+    {% endfor %}
+
+    <hr>
+    <h2>{{ post.deepdive.title }}</h2>
+    {% if post.deepdive.image %}
+    <figure>
+      <img src="{{ post.deepdive.image.src }}" alt="{{ post.deepdive.image.alt }}">
+      <figcaption>{{ post.deepdive.image.attribution_html | safe }}</figcaption>
+    </figure>
+    {% endif %}
+    {{ post.deepdive.body_html | safe }}
+
+    {{ post.closing_html | safe }}
+
+    {% if post.sources %}
+    <hr>
+    <p class="sources"><strong>Sources:</strong>
+      {% for s in post.sources %}<a href="{{ s.url }}">{{ s.text or s.url }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}
+    </p>
+    {% endif %}
+  </article>
+</div>
+</body>
+</html>

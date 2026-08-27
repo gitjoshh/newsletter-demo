@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>{{ site.title }}</title>
+    <link>{{ site.base_url }}/</link>
+    <description>{{ site.tagline }}</description>
+    <language>{{ site.language | default('en') }}</language>
+    <lastBuildDate>{{ build_date }}</lastBuildDate>
+    {% for p in posts %}
+    <item>
+      <title>{{ p.title | e }}</title>
+      <link>{{ site.base_url }}/posts/{{ p.slug }}/</link>
+      <guid isPermaLink="true">{{ site.base_url }}/posts/{{ p.slug }}/</guid>
+      <pubDate>{{ p.rfc822 }}</pubDate>
+      <description>{{ p.excerpt | e }}</description>
+      {% for t in p.tags %}<category>{{ t | e }}</category>{% endfor %}
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

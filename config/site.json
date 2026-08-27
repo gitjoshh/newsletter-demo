@@ -1,0 +1,14 @@
+{
+  "title": "Run For Your Life",
+  "tagline": "Boxing, running, and horror movies, once a week.",
+  "base_url": "https://run-for-your-life.pages.dev",
+  "author": "Joshua Laurie",
+  "language": "en",
+  "posts_dir": "content/posts",
+  "output_dir": "public",
+  "cf_project": "run-for-your-life",
+  "commit_author_name": "run-for-your-life-bot",
+  "commit_author_email": "joshhlaurie@gmail.com",
+  "git_branch": "main",
+  "tags": ["horror", "running", "roundup", "letterboxd", "deep-dive"]
+}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><style>{{ style_css }}</style></head>
+<body>
+<div class="wrap">
+  <div class="callout">
+    <strong>Draft for review - issue of {{ post.date }}</strong><br>
+    Reply <strong>approve</strong> to publish to {{ site.base_url }} and send the teaser email,
+    or reply <strong>revise:</strong> followed by your notes.
+    {% if horror_interpretation %}<br><br><em>Note: this week's horror link is a thematic reading, not a documented fact.</em>{% endif %}
+    {% if warnings %}<br><br><strong>Pipeline warnings:</strong><br>{% for w in warnings %}&bull; {{ w }}<br>{% endfor %}{% endif %}
+  </div>
+
+  <h2 style="margin-top:1.5em">Teaser (posts after approval)</h2>
+  <div class="copybox">{{ teaser_text }}</div>
+
+  <hr>
+  <h2>The post</h2>
+</div>
+
+{{ post_html | safe }}
+</body>
+</html>

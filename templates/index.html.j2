@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="{{ site.language | default('en') }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ site.title }}</title>
+<meta name="description" content="{{ site.tagline }}">
+<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.base_url }}/rss.xml">
+<style>{{ style_css }}</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">{{ site.title }}</div>
+  <h1>{{ site.title }}</h1>
+  <p class="subtitle">{{ site.tagline }}</p>
+  <ul class="index-list">
+    {% for p in posts %}
+    <li>
+      <a class="title" href="{{ site.base_url }}/posts/{{ p.slug }}/">{{ p.title }}</a>
+      <div class="meta">{{ p.date }}{% if p.tags %} &middot; {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}{% endif %}</div>
+      <p>{{ p.excerpt }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+</body>
+</html>

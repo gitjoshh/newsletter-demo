@@ -1,0 +1,16 @@
+# Core
+python-dotenv>=1.0.1
+requests>=2.32.0
+
+# Drafting / research (Anthropic Messages API + web_search tool)
+# Built and tested against 0.112.x
+anthropic>=0.69.0
+
+# Templating (site pages, RSS, approval + ready-to-post emails)
+jinja2>=3.1.4
+
+# Markdown -> HTML for post bodies and the preview
+markdown-it-py>=3.0.0
+
+# Image normalisation (resize / re-encode fetched stock photos)
+pillow>=10.4.0

@@ -1,0 +1,21 @@
+{
+  "color": {
+    "bg": "#0f0f10",
+    "surface": "#17171a",
+    "text": "#e8e6e3",
+    "muted": "#9a9791",
+    "accent": "#c8102e",
+    "accent_text": "#ffffff",
+    "border": "#2a2a2e",
+    "link": "#e5573f"
+  },
+  "font": {
+    "body": "Georgia, 'Iowan Old Style', 'Times New Roman', serif",
+    "heading": "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    "mono": "'SFMono-Regular', Menlo, Consolas, monospace"
+  },
+  "layout": {
+    "content_width": "680px",
+    "radius": "6px"
+  }
+}

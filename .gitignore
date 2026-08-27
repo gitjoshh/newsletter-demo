@@ -1,0 +1,34 @@
+# Secrets & credentials
+.env
+credentials.json
+token.json
+*.pem
+
+# Temp / regenerable
+.tmp/
+*.log
+.wrangler/
+
+# Personal source material (Letterboxd email carries an unsubscribe token; blog draft)
+samples/
+
+# Local-only Claude Code settings
+.claude/settings.local.json
+
+# Pipeline state (per-issue working files, approval tracking) — not regenerable
+state/*
+!state/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
