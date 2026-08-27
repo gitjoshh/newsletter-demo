@@ -13,8 +13,9 @@ import json
 import os
 import re
 
-from lib.common import fail, require_env
+from lib.common import fail, load_env
 
+load_env()
 MODEL = os.getenv("ANTHROPIC_MODEL", "claude-opus-5")
 
 # Server tool version for web search. Opus 5 / Sonnet 5 support the dynamic-filter
@@ -27,12 +28,24 @@ WEB_SEARCH_TOOL = {
 
 
 def _client():
-    require_env("ANTHROPIC_API_KEY")
     try:
         import anthropic
     except ImportError:
         fail("The 'anthropic' package is not installed (pip install -r requirements.txt)")
-    return anthropic.Anthropic()
+    load_env()
+    # Cloud routine environments strip ANTHROPIC_API_KEY, so accept a fallback name.
+    key = os.getenv("ANTHROPIC_API_KEY") or os.getenv("RFYL_ANTHROPIC_KEY")
+    if key:
+        return anthropic.Anthropic(api_key=key)
+    # No explicit key: let the SDK resolve ambient credentials (e.g. an
+    # ANTHROPIC_AUTH_TOKEN or OAuth profile in a Claude Code session).
+    try:
+        return anthropic.Anthropic()
+    except Exception:  # noqa: BLE001
+        fail(
+            "No Anthropic credential found. Set ANTHROPIC_API_KEY (local .env) or "
+            "RFYL_ANTHROPIC_KEY (cloud environment)."
+        )
 
 
 def complete(

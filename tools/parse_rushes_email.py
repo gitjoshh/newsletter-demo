@@ -229,6 +229,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--eml", required=True, help="Path to the saved Rushes email (.eml, .html, .mhtml)")
     ap.add_argument("--out", default=None, help="Where to write rushes.json (default .tmp/rushes.json)")
+    ap.add_argument(
+        "--sent-date",
+        default=None,
+        help="Override the email date (YYYY-MM-DD). Use when the input is a bare HTML "
+        "body with no headers, so week_of is still populated.",
+    )
     args = ap.parse_args()
 
     src = Path(args.eml)
@@ -238,6 +244,9 @@ def main() -> None:
     body, meta = read_html_and_meta(src)
     if "Rushes" not in body and "Popular films this week" not in body:
         fail("This does not look like a Letterboxd Rushes email (no known markers found).")
+
+    if args.sent_date and not meta.get("sent_date"):
+        meta["sent_date"] = args.sent_date[:10]
 
     warnings: list[str] = []
     films = parse_films(section_slice(body, "films"))
