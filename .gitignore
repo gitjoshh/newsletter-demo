@@ -9,6 +9,9 @@ token.json
 *.log
 .wrangler/
 
+# Built site output — regenerated from content/ on every publish
+/public/
+
 # Personal source material (Letterboxd email carries an unsubscribe token; blog draft)
 samples/
 

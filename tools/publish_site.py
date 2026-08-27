@@ -22,7 +22,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from lib.common import emit, fail, load_env, load_json_config, PROJECT_CONFIG
+from lib.common import emit, fail, load_env, load_json_config, PROJECT_CONFIG, ROOT
 from lib.site import build
 
 IMAGE_KEYS = (
@@ -68,16 +68,17 @@ def main() -> None:
     ap.add_argument("--draft", required=True)
     ap.add_argument("--images", required=True)
     ap.add_argument("--teaser", default=None, help="teaser.json to archive alongside the post")
-    ap.add_argument("--repo", default=None, help="Site folder (default $SITE_REPO_PATH)")
+    ap.add_argument("--repo", default=None, help="Site folder (default $SITE_REPO_PATH, else the project root)")
     ap.add_argument("--date", default=None, help="Publish date YYYY-MM-DD (default today)")
     ap.add_argument("--deploy", choices=["wrangler", "none"], default="none")
-    ap.add_argument("--no-git", action="store_true", help="Skip local commit even if it is a repo")
+    ap.add_argument("--no-git", action="store_true", help="Skip the local commit even if it is a repo")
+    ap.add_argument("--push", action="store_true", help="After committing, push content/ to origin (cloud routine)")
     args = ap.parse_args()
 
     load_env()
-    repo = Path(args.repo or os.getenv("SITE_REPO_PATH", "")).expanduser()
-    if not repo or not repo.is_dir():
-        fail("SITE_REPO_PATH is not set or not a directory (pass --repo for testing).")
+    repo = Path(args.repo or os.getenv("SITE_REPO_PATH") or ROOT).expanduser()
+    if not repo.is_dir():
+        fail(f"Site folder does not exist: {repo}")
 
     site_cfg = load_json_config(PROJECT_CONFIG / "site.json")
     draft = json.loads(Path(args.draft).read_text(encoding="utf-8"))
@@ -124,12 +125,13 @@ def main() -> None:
     base_url = site_cfg.get("base_url", "").rstrip("/")
     post_url = f"{base_url}/posts/{slug}/"
 
-    committed = False
+    committed = pushed = False
     if not args.no_git and is_git_repo(repo):
         name = site_cfg.get("commit_author_name", "run-for-your-life-bot")
         mail = site_cfg.get("commit_author_email", "bot@example.com")
-        run(["git", "-C", str(repo), "add", "-A"])
-        dirty = run(["git", "-C", str(repo), "status", "--porcelain"]).stdout.strip()
+        posts_rel = site_cfg.get("posts_dir", "content/posts").split("/")[0]  # e.g. "content"
+        run(["git", "-C", str(repo), "add", "-A", "--", posts_rel])
+        dirty = run(["git", "-C", str(repo), "status", "--porcelain", "--", posts_rel]).stdout.strip()
         if dirty:
             verb = "Update" if is_update else "Publish"
             run([
@@ -138,6 +140,12 @@ def main() -> None:
                 "commit", "-m", f"{verb}: {draft.get('title')} ({slug})",
             ])
             committed = True
+            if args.push:
+                branch = run(
+                    ["git", "-C", str(repo), "rev-parse", "--abbrev-ref", "HEAD"]
+                ).stdout.strip()
+                run(["git", "-C", str(repo), "push", "origin", branch])
+                pushed = True
 
     deploy: dict = {}
     if args.deploy == "wrangler":
@@ -154,6 +162,7 @@ def main() -> None:
             "slug": slug,
             "updated_existing": is_update,
             "committed": committed,
+            "pushed": pushed,
             "deploy": deploy or None,
             "site": summary,
         }
