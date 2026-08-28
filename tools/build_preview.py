@@ -76,6 +76,15 @@ def teaser_block(teaser: dict) -> str:
     return "\n\n".join(p.strip() for p in parts if p.strip())
 
 
+def film_blocks(teaser: dict, link_line: str) -> list[dict]:
+    """Assemble each film post: hook + lifted excerpt + link line."""
+    out = []
+    for f in teaser.get("films", []):
+        parts = [f.get("hook", "").strip(), f.get("excerpt", "").strip(), link_line]
+        out.append({"title": f.get("title", ""), "text": "\n\n".join(p for p in parts if p)})
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--draft", required=True)
@@ -118,7 +127,7 @@ def main() -> None:
     email_html = env().get_template("preview_email.html.j2").render(
         post=light_ctx,
         teaser_text=teaser_block(teaser),
-        film_posts=teaser.get("films", []),
+        film_posts=film_blocks(teaser, "(the post link is added when this publishes)"),
         warnings=images.get("warnings", []),
         interpretation=bool(draft.get("_interpretation")),
         image_list=image_list,

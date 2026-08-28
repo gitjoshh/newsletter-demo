@@ -39,6 +39,11 @@ def main() -> None:
     t_img = imgs[t_idx] if 0 <= t_idx < len(imgs) else (imgs[0] if imgs else None)
 
     text = teaser_text(teaser, args.url)
+    film_posts = []
+    for f in teaser.get("films", []):
+        parts = [f.get("hook", "").strip(), f.get("excerpt", "").strip(), f"Read it: {args.url}"]
+        film_posts.append({"title": f.get("title", ""), "text": "\n\n".join(p for p in parts if p)})
+
     teaser_image = None
     image_cdn_url = None
     if t_img:
@@ -70,7 +75,7 @@ def main() -> None:
         post_title=args.title or teaser.get("_title") or "This week's issue",
         post_url=args.url,
         teaser_text=text,
-        film_posts=teaser.get("films", []),
+        film_posts=film_posts,
         teaser_image=teaser_image,
         all_images=all_images,
     )

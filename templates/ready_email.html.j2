@@ -26,7 +26,7 @@
   <div class="box">{{ teaser_text }}</div>
   {% for f in film_posts %}
   <p style="margin-top:1.2em"><strong>{{ f.title }}</strong> &mdash; standalone post</p>
-  <div class="box">{{ f.post }}</div>
+  <div class="box">{{ f.text }}</div>
   {% endfor %}
 
   {% if teaser_image %}
