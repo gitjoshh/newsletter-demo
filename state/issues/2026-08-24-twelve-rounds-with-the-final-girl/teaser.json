@@ -1,7 +1,19 @@
 {
-  "para1": "The final girl never asked for a rematch, but the franchise needs one more name on the poster. Sound familiar to anyone who's watched a boxer get talked out of retirement for a payday nobody wanted them to take?",
-  "para2": "This week's session log covers a sad Spider-Man, an ocean-sized endurance slog, a guilt-horror film that keeps nagging at me on the bag, and the Bourdain biopic that left me hungrier than my last three meals combined. But the main event is a deep-dive on the new slasher-about-slashers, the one where a director gets obsessed with dragging the original final girl back into the ring. I get into what that says about comeback fights nobody schedules because you're healed, only because somebody needs you to prove you can still take it. The real opponent was never the guy across the ring anyway.",
-  "cta": "Read this week's issue: {url}",
-  "_word_count": 141,
+  "blog": {
+    "para1": "Got properly worked over on the mitts this week, the kind of session where your coach starts threatening punishments for dropped hands and you realise you've earned every one of them. Fitting, because everything I watched this week was about people getting called back into the ring nobody asked them to re-enter.",
+    "para2": "This issue runs through a sad-Spider-Man college arc that actually works, a Nolan ocean epic I sat through three separate times, a guilt-thriller that pairs unnervingly well with cardio-based punishment, and a Bourdain biopic with one line cook you won't forget. But the real meat is the deep-dive on the new slasher-about-slashers, which understands something true about comeback fights: nobody schedules one because they're fully healed. They get the call because they can still take it.",
+    "cta": "Full session log and the final girl breakdown here: {url}"
+  },
+  "films": [
+    {
+      "title": "Teenage Sex and Death at Camp Miasma (2025)",
+      "post": "Every slasher franchise eventually has to answer the same question: what happens to the final girl after the credits roll and the sequels keep coming anyway. This one actually answers it, and it's nastier than the killer ever was.\n\nA young director gets handed the reins to revive a dead franchise and becomes fixated on dragging the original survivor back for a rematch she never wanted. What could've been a cheap victory-lap cameo turns into a genuinely unsettling two-hander about obsession, fandom, and the specific cruelty of asking someone to relive their worst night for an audience.\n\nI kept thinking about journeyman fighters taking rematches they didn't sign up for twice, the ones who get the call not because they're ready but because they're capable, and being capable when you'd rather not be is its own quiet horror. This film gets that. The monster in the woods was never the point. The monster of expectation is.\n\nWatch it, then argue with me about who the real villain is."
+    },
+    {
+      "title": "Obsession (2025)",
+      "post": "Guilt-thrillers hit different when you've just come off a session where your coach is threatening consequences for every dropped hand. There's something about watching a character slowly get crushed by a decision they can't undo that pairs disturbingly well with muscle failure.\n\nThis one doesn't rely on jump scares or gore, it just tightens the screws scene by scene until you're sitting there complicit in something you didn't do. That's the trick, good guilt-thrillers make the audience feel implicated too.\n\nNot flashy, not loud, just relentlessly, quietly effective. If you like your dread slow-cooked rather than jump-started, this is the one to put on. Watch it with the lights off and don't expect to feel great afterward."
+    }
+  ],
+  "_word_count": 128,
   "_model": "claude-sonnet-5"
 }
