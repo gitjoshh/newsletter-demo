@@ -1,36 +1,45 @@
-"""Classify Josh's reply to an approval email.
+"""Classify Josh's reply to a draft email.
 
 Input: --thread-text <path> - the plain text of his latest reply (the routine
 strips quoted history before calling this).
 
-Output: {"intent": "approve" | "revise" | "unclear", "revision_notes": "..."}.
+Output: {"intent": "approve" | "personal_input" | "revise" | "unclear",
+         "revision_notes": "...", "personal_text": "..."}
 
-- approve: he is happy to publish as-is.
-- revise: he wants changes. revision_notes = the actionable changes, verbatim where
-  possible, with quoting/history removed. An "approve" that also lists changes is a
-  "revise" (apply the changes first).
-- unclear: anything else (a question, ambiguous, empty).
+- approve: happy to publish as-is.
+- personal_input: he answered the draft's questions / sent his own stories, opinions,
+  or paragraphs to weave in. personal_text = his prose, verbatim, history stripped.
+- revise: he asked for specific changes/edits (not his own story content).
+  revision_notes = the actionable changes. "approve" + changes -> revise.
+- unclear: a question, out-of-office, empty, or genuinely can't tell.
 """
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from lib.common import emit, fail, tmp_path
 from lib.llm import complete_json
 
-SYSTEM = """You classify a single email reply about a draft blog post.
+SYSTEM = """You classify a single email reply about a draft blog post that was sent with \
+a few questions asking the author for his own real stories / thoughts.
 
-Return ONLY a JSON object in a ```json fenced block:
-{"intent": "approve" | "revise" | "unclear", "revision_notes": "string"}
+Return ONLY a ```json fenced object:
+{"intent": "approve" | "personal_input" | "revise" | "unclear",
+ "revision_notes": "string", "personal_text": "string"}
 
 Rules:
-- "approve": the reply clearly says to publish / ship / post it, with no requested changes.
-- "revise": the reply asks for any change, even small. Put the requested changes in \
-"revision_notes" as clear instructions. If the reply says "approve" but also asks for \
-changes, intent is "revise".
-- "unclear": a question, an out-of-office, empty, or you genuinely cannot tell.
-- "revision_notes" is "" unless intent is "revise"."""
+- "approve": clearly says publish / ship / post it, with nothing else to fold in.
+- "personal_input": the reply contains the author's own material to incorporate - answers \
+to the questions, a personal anecdote, an opinion, a paragraph or two of prose. Put that \
+prose in "personal_text" verbatim (strip greetings/signature/quoted history). If he ALSO \
+says approve, still use "personal_input" (fold his material in first, then he approves the \
+result).
+- "revise": he asks for specific edits/changes to the existing text and does NOT supply \
+his own story content. Put the changes in "revision_notes".
+- "unclear": a question back, out-of-office, empty, or you cannot tell.
+- Unused fields are ""."""
 
 
 def main() -> None:
@@ -44,24 +53,24 @@ def main() -> None:
         fail(f"Reply text not found: {p}")
     reply = p.read_text(encoding="utf-8").strip()
     if not reply:
-        result = {"data": {"intent": "unclear", "revision_notes": ""}}
+        data = {"intent": "unclear", "revision_notes": "", "personal_text": ""}
     else:
-        result = complete_json(
+        data = complete_json(
             SYSTEM,
             f"The reply:\n\n{reply}\n\nClassify it.",
-            max_tokens=1000,
+            max_tokens=2000,
             no_thinking=True,
-        )
+        )["data"]
 
-    data = result["data"]
     intent = data.get("intent")
-    if intent not in ("approve", "revise", "unclear"):
+    if intent not in ("approve", "personal_input", "revise", "unclear"):
         fail(f"Model returned an invalid intent: {intent!r}")
     data["revision_notes"] = data.get("revision_notes", "") if intent == "revise" else ""
+    data["personal_text"] = data.get("personal_text", "") if intent == "personal_input" else ""
 
     out_path = Path(args.out) if args.out else tmp_path("reply_intent.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(__import__("json").dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    out_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
 
     emit({"status": "ok", "out": str(out_path), **data})
 

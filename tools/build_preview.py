@@ -91,8 +91,9 @@ def main() -> None:
         post=light_ctx,
         teaser_text=teaser_block(teaser),
         warnings=images.get("warnings", []),
-        interpretation=bool(json.loads(Path(args.draft).read_text(encoding="utf-8")).get("_interpretation")),
+        interpretation=bool(draft.get("_interpretation")),
         image_list=image_list,
+        questions=draft.get("questions", []),
     )
     email_out = Path(args.email_out) if args.email_out else out_path.with_name("preview_email.html")
     email_out.write_text(email_html, encoding="utf-8")
