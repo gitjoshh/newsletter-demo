@@ -33,7 +33,7 @@ SCHEMA = """{
   "horror_deepdive": {"title": "section heading (no colon)", "body_md": "the longer horror-angle piece built from horror_angle.json; grounded, cites facts inline as Markdown links; ties explicitly to boxing / rounds / going the distance / running / endurance"},
   "closing_md": "short sign-off in the style of the reference post",
   "sources": [{"text": "what it supports", "url": "https://..."}],
-  "image_queries": ["1-2 stock-photo phrases for the deep-dive's running/endurance MOOD photo only - concrete, evocative, NOT film scenes. Film scene stills are sourced separately from TMDB."],
+  "image_queries": ["1-2 stock-photo search phrases for the deep-dive's MOOD photo. Draw from boxing / roadwork / running / sweat / the grind of training: e.g. 'boxer wrapping hands in a dim gym', 'lone runner on an empty road at dawn', 'heavy bag and sweat under gym lights', 'fighter resting on the ropes between rounds'. Concrete and evocative, horizontal framing, NOT film scenes (film stills come from TMDB). If the revision notes or personal input name a photo the author wants, make that the first query."],
   "questions": ["3-4 specific questions for Josh, each pointing at a spot in the draft where his OWN real training memory, opinion, or story would make it land. Reference the actual films / the horror angle. e.g. 'The intro leans on a dawn-run beat - do you have a real early session from this week that fits, or a different way in?'"]
 }"""
 
