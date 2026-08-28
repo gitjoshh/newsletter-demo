@@ -127,7 +127,15 @@ the path to the issue dir (all artifacts are kept). Do not advance
   TMDB); stock/CC photos are kept only for the deep-dive's running/mood shot and as the
   teaser photo.
 - 2026-08-28: primary personal lens changed from running to **boxing** (running/cardio kept
-  as the adjacent thread); voice notes now allow illustrative/composite anecdotes grounded
-  in real training detail. `find_horror_angle.py` renamed its `running_tie_in` field to
-  `training_tie_in`. Hosting is a **private GitHub repo + Cloudflare Pages via API token**,
-  run by a scheduled cloud routine (see `/schedule`).
+  as the adjacent thread). `find_horror_angle.py` renamed `running_tie_in` -> `training_tie_in`.
+  Hosting is a **public GitHub repo + Cloudflare Pages** deployed by `wrangler` with a
+  Cloudflare API token, run by a scheduled cloud routine (see `/schedule`).
+- 2026-08-28: cloud-run hardening after first live cycle - `RFYL_ANTHROPIC_KEY` (env strips
+  `ANTHROPIC_API_KEY`), network policy **Full**, deploy-before-git + detached-HEAD-safe
+  non-fatal push, images resolved next to `images.json`, draft email is a lightweight body
+  with `preview.html` attached, teaser photo served from the site CDN (no attachment).
+- 2026-08-28: **real stories** step - `draft_post.py` first pass emits `questions` and keeps
+  invented anecdotes lightly sketched; `--personal "<prose>"` folds Josh's own material in.
+  `classify_reply.py` gains a `personal_input` intent. The draft email leads with the
+  questions; Josh replies with a paragraph or two, gets a v2, then approves. Titles never
+  contain a colon (`draft_post.py` guard keeps the part before it).
