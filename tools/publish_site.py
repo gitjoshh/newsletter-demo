@@ -94,7 +94,8 @@ def main() -> None:
 
     site_cfg = load_json_config(PROJECT_CONFIG / "site.json")
     draft = json.loads(Path(args.draft).read_text(encoding="utf-8"))
-    images = json.loads(Path(args.images).read_text(encoding="utf-8"))
+    images_path = Path(args.images)
+    images = json.loads(images_path.read_text(encoding="utf-8"))
 
     slug = draft.get("slug")
     if not slug:
@@ -106,12 +107,30 @@ def main() -> None:
     posts_dir.mkdir(parents=True, exist_ok=True)
     img_dir.mkdir(parents=True, exist_ok=True)
 
+    def resolve_image(img: dict) -> Path | None:
+        """Find the image file. local_path can be stale (issue dir was renamed
+        after fetch_images ran), so also look next to images.json."""
+        fname = img.get("filename") or Path(img.get("local_path", "")).name
+        for cand in (
+            Path(img.get("local_path", "")),
+            images_path.parent / "images" / fname,
+            images_path.parent / fname,
+        ):
+            if fname and cand.is_file():
+                return cand
+        return None
+
     stored_images = []
+    missing = []
     for img in images.get("images", []):
-        src = Path(img.get("local_path", ""))
-        if src.exists():
-            shutil.copy2(src, img_dir / src.name)
+        src = resolve_image(img)
+        if src:
+            shutil.copy2(src, img_dir / (img.get("filename") or src.name))
+        else:
+            missing.append(img.get("filename") or img.get("local_path"))
         stored_images.append({k: img.get(k) for k in IMAGE_KEYS})
+    if missing:
+        fail(f"Image file(s) not found (looked next to {images_path}): {missing}")
 
     post = {
         "slug": slug,

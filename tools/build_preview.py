@@ -21,12 +21,24 @@ from lib.common import emit, load_json_config, PROJECT_CONFIG, tmp_path
 from lib.site import env, load_style, post_context, render_post_page
 
 
-def data_uri(path: str) -> str:
-    p = Path(path)
-    if not p.exists():
+def resolve_image(img: dict, images_dir: Path) -> Path | None:
+    """local_path can be stale after the issue dir is renamed - also look next to images.json."""
+    fname = img.get("filename") or Path(img.get("local_path", "")).name
+    for cand in (
+        Path(img.get("local_path", "")),
+        images_dir / "images" / fname,
+        images_dir / fname,
+    ):
+        if fname and cand.is_file():
+            return cand
+    return None
+
+
+def data_uri(path: Path | None) -> str:
+    if not path or not path.is_file():
         return ""
-    mime = mimetypes.guess_type(p.name)[0] or "image/jpeg"
-    return f"data:{mime};base64," + base64.b64encode(p.read_bytes()).decode("ascii")
+    mime = mimetypes.guess_type(path.name)[0] or "image/jpeg"
+    return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode("ascii")
 
 
 def assemble_post(draft: dict, images: dict) -> dict:
@@ -52,6 +64,7 @@ def main() -> None:
     args = ap.parse_args()
 
     draft = json.loads(Path(args.draft).read_text(encoding="utf-8"))
+    images_dir = Path(args.images).parent
     images = json.loads(Path(args.images).read_text(encoding="utf-8"))
     site_cfg = load_json_config(PROJECT_CONFIG / "site.json")
     _, style_css = load_style()
@@ -59,7 +72,7 @@ def main() -> None:
     post = assemble_post(draft, images)
 
     # 1) full standalone page (data-URI images) -> attachment
-    full_ctx = post_context(post, resolve_src=lambda img: data_uri(img.get("local_path", "")))
+    full_ctx = post_context(post, resolve_src=lambda img: data_uri(resolve_image(img, images_dir)))
     full_html = render_post_page(full_ctx, site_cfg, style_css)
     out_path = Path(args.out) if args.out else tmp_path("preview.html")
     out_path.parent.mkdir(parents=True, exist_ok=True)
