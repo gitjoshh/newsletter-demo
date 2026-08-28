@@ -15,8 +15,9 @@ from lib.site import env, load_style
 
 
 def teaser_text(teaser: dict, url: str) -> str:
-    cta = teaser.get("cta", "").replace("{url}", url).strip()
-    return "\n\n".join(x for x in (teaser.get("para1", "").strip(), teaser.get("para2", "").strip(), cta) if x)
+    b = teaser.get("blog", teaser)  # tolerate old flat shape
+    cta = b.get("cta", "").replace("{url}", url).strip()
+    return "\n\n".join(x for x in (b.get("para1", "").strip(), b.get("para2", "").strip(), cta) if x)
 
 
 def main() -> None:
@@ -57,6 +58,7 @@ def main() -> None:
         post_title=args.title or teaser.get("_title") or "This week's issue",
         post_url=args.url,
         teaser_text=text,
+        film_posts=teaser.get("films", []),
         teaser_image=teaser_image,
     )
 

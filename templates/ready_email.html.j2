@@ -18,10 +18,16 @@
   <h1>Ready to post &mdash; &ldquo;{{ post_title }}&rdquo;</h1>
   <p class="sub">The post is live: <a href="{{ post_url }}">{{ post_url }}</a></p>
 
-  <p>Copy the teaser below and paste it into Facebook / Threads. Save the photo
-  underneath (long-press on phone, right-click on desktop) and attach it to the post.</p>
+  <p>Copy whichever post you want and paste it into Facebook / Threads. The newsletter
+  teaser links the post; the film posts stand alone. Save the photo underneath
+  (long-press on phone, right-click on desktop) if you want it on the post.</p>
 
+  <p><strong>Newsletter teaser</strong></p>
   <div class="box">{{ teaser_text }}</div>
+  {% for f in film_posts %}
+  <p style="margin-top:1.2em"><strong>{{ f.title }}</strong> &mdash; standalone post</p>
+  <div class="box">{{ f.post }}</div>
+  {% endfor %}
 
   {% if teaser_image %}
   <p style="margin-top:1.6em"><strong>Photo</strong> &mdash; direct link:

@@ -1,12 +1,11 @@
 """Render the draft preview for the approval email.
 
-Emits TWO files:
-  --out       preview.html        full standalone page, images embedded as data:
-                                  URIs. This is what gets ATTACHED to the email
-                                  (open in a browser) and mirrors the live post.
-  --email-out preview_email.html  lightweight, text-only, no images, small enough
-                                  that Gmail will not clip it. This is the email
-                                  BODY. Needs --teaser for the teaser block.
+Emits:
+  --out       preview.html        full standalone page, images embedded as data: URIs.
+  --email-out preview_email.html  lightweight text-only email BODY (Gmail won't clip it).
+  --deploy-preview                also push preview.html to draft.<project>.pages.dev so
+                                  the email can LINK the styled draft (Gmail attachments
+                                  via the connector are unreliable).
 """
 from __future__ import annotations
 
@@ -15,10 +14,32 @@ import base64
 import datetime as dt
 import json
 import mimetypes
+import re
+import shutil
+import subprocess
 from pathlib import Path
 
 from lib.common import emit, load_json_config, PROJECT_CONFIG, tmp_path
 from lib.site import env, load_style, post_context, render_post_page
+
+
+def deploy_preview(preview_html: Path, project: str) -> str | None:
+    """Serve the self-contained preview.html at draft.<project>.pages.dev."""
+    stage = tmp_path("draft_preview")
+    if stage.exists():
+        shutil.rmtree(stage)
+    stage.mkdir(parents=True)
+    shutil.copy2(preview_html, stage / "index.html")
+    cp = subprocess.run(
+        ["npx", "--yes", "wrangler", "pages", "deploy", str(stage),
+         "--project-name", project, "--branch", "draft", "--commit-dirty=true"],
+        capture_output=True, text=True,
+    )
+    urls = re.findall(r"https://[a-z0-9.\-]+\.pages\.dev\S*", cp.stdout + "\n" + cp.stderr)
+    for u in urls:
+        if u.startswith("https://draft."):
+            return u
+    return urls[-1] if urls else None
 
 
 def resolve_image(img: dict, images_dir: Path) -> Path | None:
@@ -50,7 +71,8 @@ def assemble_post(draft: dict, images: dict) -> dict:
 
 
 def teaser_block(teaser: dict) -> str:
-    parts = [teaser.get("para1", ""), teaser.get("para2", ""), teaser.get("cta", "")]
+    b = teaser.get("blog", teaser)  # tolerate old flat shape
+    parts = [b.get("para1", ""), b.get("para2", ""), b.get("cta", "")]
     return "\n\n".join(p.strip() for p in parts if p.strip())
 
 
@@ -61,6 +83,7 @@ def main() -> None:
     ap.add_argument("--teaser", default=None, help="teaser.json (for the email body's teaser block)")
     ap.add_argument("--out", default=None, help="full preview.html (default .tmp/preview.html)")
     ap.add_argument("--email-out", default=None, help="lightweight body (default alongside --out)")
+    ap.add_argument("--deploy-preview", action="store_true", help="serve preview at draft.<project>.pages.dev")
     args = ap.parse_args()
 
     draft = json.loads(Path(args.draft).read_text(encoding="utf-8"))
@@ -78,6 +101,11 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(full_html, encoding="utf-8")
 
+    # 1b) optionally serve it so the email can link the styled draft
+    preview_url = None
+    if args.deploy_preview:
+        preview_url = deploy_preview(out_path, site_cfg.get("cf_project", "run-for-your-life"))
+
     # 2) lightweight text-only body (no images) -> email body
     light_post = dict(post)
     light_post["images"] = []  # drop all figures
@@ -90,10 +118,12 @@ def main() -> None:
     email_html = env().get_template("preview_email.html.j2").render(
         post=light_ctx,
         teaser_text=teaser_block(teaser),
+        film_posts=teaser.get("films", []),
         warnings=images.get("warnings", []),
         interpretation=bool(draft.get("_interpretation")),
         image_list=image_list,
         questions=draft.get("questions", []),
+        preview_url=preview_url,
     )
     email_out = Path(args.email_out) if args.email_out else out_path.with_name("preview_email.html")
     email_out.write_text(email_html, encoding="utf-8")
@@ -103,6 +133,7 @@ def main() -> None:
             "status": "ok",
             "out": str(out_path),
             "email_out": str(email_out),
+            "preview_url": preview_url,
             "full_bytes": out_path.stat().st_size,
             "email_bytes": email_out.stat().st_size,
             "title": draft.get("title"),

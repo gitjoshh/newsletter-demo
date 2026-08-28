@@ -19,10 +19,11 @@
   <div class="box"><strong>Draft for review &mdash; {{ post.date }} &mdash; &ldquo;{{ post.title }}&rdquo;</strong><br>
     Reply with a paragraph or two answering any of the questions below and I&rsquo;ll weave
     your real material in, then send the final for approval. Or reply <strong>approve</strong>
-    to publish this as-is, or <strong>revise:</strong> then your notes.
+    to publish this as-is, or <strong>revise:</strong> then your notes. You can also ask for
+    a different photo in your reply.
     {% if interpretation %}<br><br><em>Heads up: this week&rsquo;s horror link is a thematic reading, not a documented fact.</em>{% endif %}
     {% if warnings %}<br><br><strong>Pipeline warnings:</strong> {{ warnings | join('; ') }}{% endif %}
-    <br><br>The full styled version, with all images, is attached as <strong>preview.html</strong> &mdash; open it in a browser.
+    <br><br>{% if preview_url %}Full styled draft with all images: <a href="{{ preview_url }}">{{ preview_url }}</a>{% else %}The styled version with images will be in the publish email.{% endif %}
   </div>
 
   {% if questions %}
@@ -32,8 +33,13 @@
   </ol>
   {% endif %}
 
-  <h2>Teaser (you&rsquo;ll get this to paste into Facebook after publish)</h2>
+  <h2>Social posts (you&rsquo;ll get these to paste after publish)</h2>
+  <p><strong>Newsletter teaser</strong></p>
   <div class="box">{{ teaser_text }}</div>
+  {% for f in film_posts %}
+  <p style="margin-top:1em"><strong>{{ f.title }}</strong> &mdash; standalone post</p>
+  <div class="box">{{ f.post }}</div>
+  {% endfor %}
 
   <hr>
 
