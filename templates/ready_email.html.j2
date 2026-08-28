@@ -30,10 +30,20 @@
   {% endfor %}
 
   {% if teaser_image %}
-  <p style="margin-top:1.6em"><strong>Photo</strong> &mdash; direct link:
-    <a href="{{ teaser_image.url }}">{{ teaser_image.url }}</a></p>
+  <p style="margin-top:1.6em"><strong>Suggested photo for the newsletter teaser</strong> &mdash;
+    <a href="{{ teaser_image.url }}">download</a></p>
   <img src="{{ teaser_image.src }}" alt="{{ teaser_image.alt }}">
   <div class="cap">{{ teaser_image.attribution_html | safe }}</div>
+  {% endif %}
+
+  {% if all_images %}
+  <h2 style="font-family:Helvetica,Arial,sans-serif;font-size:1.1rem;margin-top:2em">All photos (right-click / long-press the link to save)</h2>
+  <ul>
+    {% for im in all_images %}
+    <li><strong>{{ im.label }}</strong> &mdash; <a href="{{ im.url }}">{{ im.filename }}</a></li>
+    {% endfor %}
+  </ul>
+  <p class="cap">Film stills are courtesy of TMDB; the mood photo carries its own credit on the post.</p>
   {% endif %}
 </body>
 </html>

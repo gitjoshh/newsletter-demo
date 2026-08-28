@@ -4,67 +4,38 @@
 <meta charset="utf-8">
 <style>
   body { font-family: Georgia, 'Times New Roman', serif; max-width: 680px; margin: 0 auto;
-    padding: 22px; color: #222; line-height: 1.65; }
-  h1 { font-size: 1.7rem; margin: 1em 0 .15em; }
-  h2 { font-family: Helvetica, Arial, sans-serif; font-size: 1.2rem; margin: 1.7em 0 .3em; }
-  .meta { color: #777; font-size: .92rem; margin: 0 0 1.2em; }
+    padding: 22px; color: #222; line-height: 1.6; }
+  h2 { font-family: Helvetica, Arial, sans-serif; font-size: 1.15rem; margin: 1.8em 0 .3em; }
   .box { background: #f4f4f4; border: 1px solid #ddd; border-radius: 6px;
     padding: 14px 16px; white-space: pre-wrap; font-family: inherit; }
-  .imgs { color: #888; font-size: .85rem; margin-top: 2em; }
   a { color: #b5341f; }
-  hr { border: none; border-top: 1px solid #ddd; margin: 2.4em 0; }
+  ol { padding-left: 1.2em; }
+  li { margin: .4em 0; }
 </style>
 </head>
 <body>
-  <div class="box"><strong>Draft for review &mdash; {{ post.date }} &mdash; &ldquo;{{ post.title }}&rdquo;</strong><br>
-    Reply with a paragraph or two answering any of the questions below and I&rsquo;ll weave
-    your real material in, then send the final for approval. Or reply <strong>approve</strong>
-    to publish this as-is, or <strong>revise:</strong> then your notes. You can also ask for
-    a different photo in your reply.
-    {% if interpretation %}<br><br><em>Heads up: this week&rsquo;s horror link is a thematic reading, not a documented fact.</em>{% endif %}
+  <div class="box"><strong>Draft for review &mdash; {{ post.date }} &mdash; &ldquo;{{ post.title }}&rdquo;</strong><br><br>
+    {% if preview_url %}<strong>Read the full draft here:</strong> <a href="{{ preview_url }}">{{ preview_url }}</a>{% else %}The full styled draft will be in the publish email.{% endif %}
+    <br><br>Reply with a paragraph or two answering any of the questions below and I&rsquo;ll
+    weave your real material in, then send the final for approval. Or reply
+    <strong>approve</strong> to publish as-is, <strong>revise:</strong> then your notes,
+    or ask for a different photo. Put all your notes in one reply.
+    {% if interpretation %}<br><br><em>Note: this week&rsquo;s horror link is a thematic reading, not a documented fact.</em>{% endif %}
     {% if warnings %}<br><br><strong>Pipeline warnings:</strong> {{ warnings | join('; ') }}{% endif %}
-    <br><br>{% if preview_url %}Full styled draft with all images: <a href="{{ preview_url }}">{{ preview_url }}</a>{% else %}The styled version with images will be in the publish email.{% endif %}
   </div>
 
   {% if questions %}
   <h2>Your turn &mdash; anything real to add?</h2>
-  <ol>
-    {% for q in questions %}<li>{{ q }}</li>{% endfor %}
-  </ol>
+  <ol>{% for q in questions %}<li>{{ q }}</li>{% endfor %}</ol>
   {% endif %}
 
-  <h2>Social posts (you&rsquo;ll get these to paste after publish)</h2>
-  <p><strong>Newsletter teaser</strong></p>
+  <h2>Social posts</h2>
+  <p><strong>Newsletter teaser</strong> (links the post)</p>
   <div class="box">{{ teaser_text }}</div>
   {% for f in film_posts %}
-  <p style="margin-top:1em"><strong>{{ f.title }}</strong> &mdash; standalone post</p>
+  <p style="margin-top:1.1em"><strong>{{ f.title }}</strong> &mdash; standalone post</p>
   <div class="box">{{ f.post }}</div>
   {% endfor %}
-
-  <hr>
-
-  <h1>{{ post.title }}</h1>
-  {% if post.subtitle %}<p class="meta">{{ post.subtitle }}</p>{% endif %}
-
-  {{ post.intro_html | safe }}
-
-  {% for b in post.blurbs %}
-  <h2>{{ b.title }}</h2>
-  {{ b.body_html | safe }}
-  {% endfor %}
-
-  <hr>
-  <h2>{{ post.deepdive.title }}</h2>
-  {{ post.deepdive.body_html | safe }}
-
-  {{ post.closing_html | safe }}
-
-  {% if post.sources %}
-  <p class="meta"><strong>Sources:</strong>
-    {% for s in post.sources %}<a href="{{ s.url }}">{{ s.text or s.url }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}
-  </p>
-  {% endif %}
-
-  {% if image_list %}<p class="imgs">Images in the post: {{ image_list | join(', ') }}</p>{% endif %}
+  <p style="color:#888;font-size:.85rem">Direct download links for every photo come in the publish email.</p>
 </body>
 </html>

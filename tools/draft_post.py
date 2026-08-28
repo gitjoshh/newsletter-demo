@@ -60,6 +60,13 @@ TITLE RULE: the title MUST NOT contain a colon. If you would write "X: Y", write
 put "Y" in the subtitle, or join them plainly. Section headings: no colons either. Colons \
 in body prose are fine but use them sparingly.
 
+CRITICAL STYLE DIRECTIVES (anti-AI voice):
+1. Do NOT use "not A, but B" or "it's not just X, it's Y" contrast structures. State ideas directly.
+2. No artificial summaries at the end of sections or paragraphs.
+3. Banned words: delve, tapestry, testament, beacon, foster, crucial, pivotal, landscape, realm, vibrant, overarching.
+4. Avoid balanced, symmetrical sentences and the standard rule of three.
+5. Use strong, direct declarative sentences. Say what a thing IS, not what it is NOT.
+
 ANECDOTE RULE: Josh will supply his own real stories separately. On the FIRST pass, keep \
 first-person anecdotes SHORT and lightly sketched - a sentence or two, plausible and \
 grounded in real training, never a vivid confident "memory" of something specific that may \

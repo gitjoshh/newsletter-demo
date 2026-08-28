@@ -52,6 +52,18 @@ def main() -> None:
             "attribution_html": t_img.get("attribution_html", ""),
         }
 
+    # every image, labelled, with its live CDN URL for one-tap download
+    base = args.url.rstrip("/")
+    all_images = []
+    for im in imgs:
+        fn = im.get("filename") or Path(im.get("local_path", "")).name
+        if not fn:
+            continue
+        label = im.get("for") or {"hero": "Header image", "deepdive": "Deep-dive / mood photo"}.get(
+            im.get("role", ""), im.get("role", "image").title()
+        )
+        all_images.append({"label": label, "filename": fn, "url": f"{base}/{fn}"})
+
     htmldoc = env().get_template("ready_email.html.j2").render(
         site=site_cfg,
         style_css=style_css,
@@ -60,6 +72,7 @@ def main() -> None:
         teaser_text=text,
         film_posts=teaser.get("films", []),
         teaser_image=teaser_image,
+        all_images=all_images,
     )
 
     out_path = Path(args.out) if args.out else tmp_path("ready_email.html")
