@@ -1,19 +1,20 @@
 {
   "blog": {
-    "para1": "Got properly worked over on the mitts this week, the kind of session where your coach starts threatening punishments for dropped hands and you realise you've earned every one of them. Fitting, because everything I watched this week was about people getting called back into the ring nobody asked them to re-enter.",
-    "para2": "This issue runs through a sad-Spider-Man college arc that actually works, a Nolan ocean epic I sat through three separate times, a guilt-thriller that pairs unnervingly well with cardio-based punishment, and a Bourdain biopic with one line cook you won't forget. But the real meat is the deep-dive on the new slasher-about-slashers, which understands something true about comeback fights: nobody schedules one because they're fully healed. They get the call because they can still take it.",
-    "cta": "Full session log and the final girl breakdown here: {url}"
+    "para1": "This week's blog got put through a comeback fight it never asked for.\nA final girl dragged back into the ring, Nolan's ten-year road trip, and a Bourdain biopic that treats the kitchen like the last thirty seconds of a close round.\nMouthguard in, let's go.",
+    "para2": "",
+    "cta": "Read the full breakdown here: {url}"
   },
   "films": [
     {
-      "title": "Teenage Sex and Death at Camp Miasma (2025)",
-      "post": "Every slasher franchise eventually has to answer the same question: what happens to the final girl after the credits roll and the sequels keep coming anyway. This one actually answers it, and it's nastier than the killer ever was.\n\nA young director gets handed the reins to revive a dead franchise and becomes fixated on dragging the original survivor back for a rematch she never wanted. What could've been a cheap victory-lap cameo turns into a genuinely unsettling two-hander about obsession, fandom, and the specific cruelty of asking someone to relive their worst night for an audience.\n\nI kept thinking about journeyman fighters taking rematches they didn't sign up for twice, the ones who get the call not because they're ready but because they're capable, and being capable when you'd rather not be is its own quiet horror. This film gets that. The monster in the woods was never the point. The monster of expectation is.\n\nWatch it, then argue with me about who the real villain is."
+      "title": "The Odyssey (2026)",
+      "hook": "The movie blog is live and this week it went twenty years out of its way to get home.",
+      "excerpt": "This is Nolan's crack at Homer, and whatever else gets said about it, the film understands that the point of the Odyssey was never really the monsters. It's the distance. Everyone remembers the monsters. The story is actually the twenty-year distraction from getting home, dressed up as heroism the whole way there."
     },
     {
-      "title": "Obsession (2025)",
-      "post": "Guilt-thrillers hit different when you've just come off a session where your coach is threatening consequences for every dropped hand. There's something about watching a character slowly get crushed by a decision they can't undo that pairs disturbingly well with muscle failure.\n\nThis one doesn't rely on jump scares or gore, it just tightens the screws scene by scene until you're sitting there complicit in something you didn't do. That's the trick, good guilt-thrillers make the audience feel implicated too.\n\nNot flashy, not loud, just relentlessly, quietly effective. If you like your dread slow-cooked rather than jump-started, this is the one to put on. Watch it with the lights off and don't expect to feel great afterward."
+      "title": "Teenage Sex and Death at Camp Miasma (Horror Deep Dive)",
+      "hook": "The movie blog is live and this week it dragged horror's toughest survivor back for a rematch she never wanted.",
+      "excerpt": "The final girl has always been horror's version of the fighter who's still standing in round twelve, not because she hit hardest but because she absorbed everything thrown at her and simply refused to go down. Nobody remembers the exact combination that ended it. They remember that she was still upright when the credits rolled."
     }
   ],
-  "_word_count": 128,
   "_model": "claude-sonnet-5"
 }
