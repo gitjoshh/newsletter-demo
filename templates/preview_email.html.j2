@@ -1,23 +1,55 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><style>{{ style_css }}</style></head>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 680px; margin: 0 auto;
+    padding: 22px; color: #222; line-height: 1.65; }
+  h1 { font-size: 1.7rem; margin: 1em 0 .15em; }
+  h2 { font-family: Helvetica, Arial, sans-serif; font-size: 1.2rem; margin: 1.7em 0 .3em; }
+  .meta { color: #777; font-size: .92rem; margin: 0 0 1.2em; }
+  .box { background: #f4f4f4; border: 1px solid #ddd; border-radius: 6px;
+    padding: 14px 16px; white-space: pre-wrap; font-family: inherit; }
+  .imgs { color: #888; font-size: .85rem; margin-top: 2em; }
+  a { color: #b5341f; }
+  hr { border: none; border-top: 1px solid #ddd; margin: 2.4em 0; }
+</style>
+</head>
 <body>
-<div class="wrap">
-  <div class="callout">
-    <strong>Draft for review - issue of {{ post.date }}</strong><br>
-    Reply <strong>approve</strong> to publish to {{ site.base_url }} and send the teaser email,
-    or reply <strong>revise:</strong> followed by your notes.
-    {% if horror_interpretation %}<br><br><em>Note: this week's horror link is a thematic reading, not a documented fact.</em>{% endif %}
-    {% if warnings %}<br><br><strong>Pipeline warnings:</strong><br>{% for w in warnings %}&bull; {{ w }}<br>{% endfor %}{% endif %}
+  <div class="box"><strong>Draft for review &mdash; {{ post.date }} &mdash; &ldquo;{{ post.title }}&rdquo;</strong><br>
+    Reply <strong>approve</strong> to publish, or <strong>revise:</strong> then your notes.
+    {% if interpretation %}<br><br><em>Heads up: this week&rsquo;s horror link is a thematic reading, not a documented fact.</em>{% endif %}
+    {% if warnings %}<br><br><strong>Pipeline warnings:</strong> {{ warnings | join('; ') }}{% endif %}
+    <br><br>The full styled version, with all images, is attached as <strong>preview.html</strong> &mdash; open it in a browser.
   </div>
 
-  <h2 style="margin-top:1.5em">Teaser (posts after approval)</h2>
-  <div class="copybox">{{ teaser_text }}</div>
+  <h2>Teaser (auto-posts nowhere &mdash; you&rsquo;ll get it to paste into Facebook after approval)</h2>
+  <div class="box">{{ teaser_text }}</div>
 
   <hr>
-  <h2>The post</h2>
-</div>
 
-{{ post_html | safe }}
+  <h1>{{ post.title }}</h1>
+  {% if post.subtitle %}<p class="meta">{{ post.subtitle }}</p>{% endif %}
+
+  {{ post.intro_html | safe }}
+
+  {% for b in post.blurbs %}
+  <h2>{{ b.title }}</h2>
+  {{ b.body_html | safe }}
+  {% endfor %}
+
+  <hr>
+  <h2>{{ post.deepdive.title }}</h2>
+  {{ post.deepdive.body_html | safe }}
+
+  {{ post.closing_html | safe }}
+
+  {% if post.sources %}
+  <p class="meta"><strong>Sources:</strong>
+    {% for s in post.sources %}<a href="{{ s.url }}">{{ s.text or s.url }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}
+  </p>
+  {% endif %}
+
+  {% if image_list %}<p class="imgs">Images in the post: {{ image_list | join(', ') }}</p>{% endif %}
 </body>
 </html>

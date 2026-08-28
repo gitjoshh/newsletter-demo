@@ -57,12 +57,16 @@ def main() -> None:
 
     git("-c", f"user.name={name}", "-c", f"user.email={mail}", "commit", "-m", args.message)
     pushed = False
+    push_note = None
     if not args.no_push:
-        branch = git("rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
-        git("push", "origin", branch)
-        pushed = True
+        branch = cfg.get("git_branch", "main")
+        # Push HEAD explicitly so this works even in a detached-HEAD checkout.
+        cp = git("push", "origin", f"HEAD:refs/heads/{branch}", check=False)
+        pushed = cp.returncode == 0
+        if not pushed:
+            push_note = (cp.stderr.strip() or cp.stdout.strip())[:400]
 
-    emit({"status": "ok", "committed": True, "pushed": pushed, "message": args.message})
+    emit({"status": "ok", "committed": True, "pushed": pushed, "push_note": push_note, "message": args.message})
 
 
 if __name__ == "__main__":

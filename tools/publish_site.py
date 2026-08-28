@@ -63,6 +63,18 @@ def deploy_wrangler(public_dir: Path, project: str, branch: str) -> dict:
     return {"deploy_url": urls[-1] if urls else None, "all_urls": sorted(set(urls))}
 
 
+def git_push_current(repo: Path, branch: str) -> tuple[bool, str]:
+    """Push whatever HEAD is (works in detached HEAD too) to origin/<branch>.
+    Non-fatal: returns (ok, message)."""
+    cp = run(
+        ["git", "-C", str(repo), "push", "origin", f"HEAD:refs/heads/{branch}"],
+        check=False,
+    )
+    if cp.returncode == 0:
+        return True, "pushed"
+    return False, (cp.stderr.strip() or cp.stdout.strip())[:400]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--draft", required=True)
@@ -124,8 +136,22 @@ def main() -> None:
     summary = build(repo, site_cfg)
     base_url = site_cfg.get("base_url", "").rstrip("/")
     post_url = f"{base_url}/posts/{slug}/"
+    branch = site_cfg.get("git_branch", "main")
 
+    # 1) DEPLOY FIRST - this is what makes the post live. Do it before touching git
+    #    so a git hiccup can never block publication.
+    deploy: dict = {}
+    if args.deploy == "wrangler":
+        deploy = deploy_wrangler(
+            repo / site_cfg.get("output_dir", "public"),
+            site_cfg.get("cf_project", "run-for-your-life"),
+            branch,
+        )
+
+    # 2) Persist content back to git. Push failure is a warning, not fatal - the
+    #    post is already live and the next run can re-push.
     committed = pushed = False
+    push_note = None
     if not args.no_git and is_git_repo(repo):
         name = site_cfg.get("commit_author_name", "run-for-your-life-bot")
         mail = site_cfg.get("commit_author_email", "bot@example.com")
@@ -140,20 +166,8 @@ def main() -> None:
                 "commit", "-m", f"{verb}: {draft.get('title')} ({slug})",
             ])
             committed = True
-            if args.push:
-                branch = run(
-                    ["git", "-C", str(repo), "rev-parse", "--abbrev-ref", "HEAD"]
-                ).stdout.strip()
-                run(["git", "-C", str(repo), "push", "origin", branch])
-                pushed = True
-
-    deploy: dict = {}
-    if args.deploy == "wrangler":
-        deploy = deploy_wrangler(
-            repo / site_cfg.get("output_dir", "public"),
-            site_cfg.get("cf_project", "run-for-your-life"),
-            site_cfg.get("git_branch", "main"),
-        )
+        if args.push and committed:
+            pushed, push_note = git_push_current(repo, branch)
 
     emit(
         {
@@ -163,6 +177,7 @@ def main() -> None:
             "updated_existing": is_update,
             "committed": committed,
             "pushed": pushed,
+            "push_note": push_note,
             "deploy": deploy or None,
             "site": summary,
         }

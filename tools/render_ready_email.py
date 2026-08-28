@@ -1,8 +1,8 @@
 """Render the "ready to post" email after the post is live.
 
-teaser.json + images.json + --url -> ready_email.html, the finalised teaser text
-(with the real URL substituted for {url}), and the path of the photo the routine
-should attach to the email.
+teaser.json + images.json + --url -> ready_email.html + the finalised teaser text.
+The teaser photo is referenced by its live CDN URL (it ships with the post), shown
+inline and linked for one-tap save - nothing is attached to the email.
 """
 from __future__ import annotations
 
@@ -38,20 +38,26 @@ def main() -> None:
     t_img = imgs[t_idx] if 0 <= t_idx < len(imgs) else (imgs[0] if imgs else None)
 
     text = teaser_text(teaser, args.url)
+    teaser_image = None
+    image_cdn_url = None
+    if t_img:
+        fname = t_img.get("filename") or Path(t_img.get("local_path", "img.jpg")).name
+        image_cdn_url = args.url.rstrip("/") + "/" + fname  # ships alongside the post
+        teaser_image = {
+            "src": image_cdn_url,
+            "url": image_cdn_url,
+            "alt": t_img.get("alt", ""),
+            "filename": fname,
+            "attribution_html": t_img.get("attribution_html", ""),
+        }
+
     htmldoc = env().get_template("ready_email.html.j2").render(
         site=site_cfg,
         style_css=style_css,
         post_title=args.title or teaser.get("_title") or "This week's issue",
         post_url=args.url,
         teaser_text=text,
-        teaser_image={
-            "src": Path(t_img["local_path"]).name,
-            "alt": t_img.get("alt", ""),
-            "filename": Path(t_img["local_path"]).name,
-            "attribution_html": t_img.get("attribution_html", ""),
-        }
-        if t_img
-        else None,
+        teaser_image=teaser_image,
     )
 
     out_path = Path(args.out) if args.out else tmp_path("ready_email.html")
@@ -67,7 +73,7 @@ def main() -> None:
             "out": str(out_path),
             "teaser_text_file": str(txt_path),
             "teaser_text": text,
-            "attach_image": t_img["local_path"] if t_img else None,
+            "teaser_image_url": image_cdn_url,
         }
     )
 

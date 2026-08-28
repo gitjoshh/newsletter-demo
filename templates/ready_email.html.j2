@@ -1,23 +1,33 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><style>{{ style_css }}</style></head>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 640px; margin: 0 auto;
+    padding: 22px; color: #222; line-height: 1.6; }
+  h1 { font-size: 1.5rem; margin: 0 0 .3em; }
+  .sub { color: #777; margin: 0 0 1.4em; }
+  .box { background: #f4f4f4; border: 1px solid #ddd; border-radius: 6px;
+    padding: 14px 16px; white-space: pre-wrap; font-family: inherit; }
+  .cap { color: #888; font-size: .82rem; margin-top: .5em; }
+  a { color: #b5341f; }
+  img { max-width: 100%; height: auto; border-radius: 6px; margin-top: 1em; }
+</style>
+</head>
 <body>
-<div class="wrap">
-  <div class="masthead">{{ site.title }}</div>
-  <h1>Ready to post</h1>
-  <p class="subtitle">"{{ post_title }}" is live.</p>
+  <h1>Ready to post &mdash; &ldquo;{{ post_title }}&rdquo;</h1>
+  <p class="sub">The post is live: <a href="{{ post_url }}">{{ post_url }}</a></p>
 
-  <p><strong>Live URL:</strong> <a href="{{ post_url }}">{{ post_url }}</a></p>
+  <p>Copy the teaser below and paste it into Facebook / Threads. Save the photo
+  underneath (long-press on phone, right-click on desktop) and attach it to the post.</p>
 
-  <p>Copy the teaser below, then post it to Facebook / Threads with the photo attached to this email.</p>
-  <div class="copybox">{{ teaser_text }}</div>
+  <div class="box">{{ teaser_text }}</div>
 
   {% if teaser_image %}
-  <figure>
-    <img src="{{ teaser_image.src }}" alt="{{ teaser_image.alt }}">
-    <figcaption>Attached: {{ teaser_image.filename }} &middot; {{ teaser_image.attribution_html | safe }}</figcaption>
-  </figure>
+  <p style="margin-top:1.6em"><strong>Photo</strong> &mdash; direct link:
+    <a href="{{ teaser_image.url }}">{{ teaser_image.url }}</a></p>
+  <img src="{{ teaser_image.src }}" alt="{{ teaser_image.alt }}">
+  <div class="cap">{{ teaser_image.attribution_html | safe }}</div>
   {% endif %}
-</div>
 </body>
 </html>
