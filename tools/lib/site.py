@@ -25,6 +25,18 @@ def md(text: str | None) -> str:
     return _MD.render(text or "").strip()
 
 
+def _img_dims(path: Path) -> tuple[int, int] | None:
+    """(width, height) of an image file, or None. Facebook needs og:image:width
+    / :height on every image before its link-preview picker will offer them."""
+    try:
+        from PIL import Image
+
+        with Image.open(path) as im:
+            return im.size
+    except Exception:
+        return None
+
+
 def env() -> Environment:
     return Environment(
         loader=FileSystemLoader(str(TEMPLATES)),
@@ -136,6 +148,16 @@ def build(repo_path: Path, site_cfg: dict | None = None) -> dict:
                     shutil.copy2(f, dst_post_dir / f.name)
 
         ctx = post_context(data, resolve_src=lambda img: img.get("filename") or "")
+
+        # stamp real pixel dimensions onto each image so the templates can emit
+        # og:image:width / og:image:height (Facebook's preview picker needs them)
+        for img in [ctx.get("hero"), ctx.get("deepdive", {}).get("image"),
+                    *[b.get("image") for b in ctx.get("blurbs", [])]]:
+            if img and img.get("filename"):
+                dims = _img_dims(src_img_dir / img["filename"])
+                if dims:
+                    img["width"], img["height"] = dims
+
         (dst_post_dir / "index.html").write_text(
             render_post_page(ctx, site_cfg, style_css), encoding="utf-8"
         )

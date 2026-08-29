@@ -21,7 +21,10 @@
 <meta property="og:url" content="{{ site.base_url }}/posts/{{ post.slug }}/">
 {% for im in og_imgs %}
 <meta property="og:image" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ im.filename }}">
-<meta property="og:image:alt" content="{{ im.alt }}">
+<meta property="og:image:secure_url" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ im.filename }}">
+{% if im.width and im.height %}<meta property="og:image:width" content="{{ im.width }}">
+<meta property="og:image:height" content="{{ im.height }}">
+{% endif %}<meta property="og:image:alt" content="{{ im.alt }}">
 {% endfor %}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ post.title }}">
