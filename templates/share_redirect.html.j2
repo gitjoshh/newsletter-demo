@@ -4,29 +4,28 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
 <title>{{ post.title }} - {{ site.title }}</title>
-<link rel="canonical" href="{{ post_url }}">
 
 {# A share stub: same post, but THIS photo leads so Facebook's link card uses it.
-   og:url points at this stub (self-referential) so Facebook keeps it as its own
-   scrape instead of collapsing to the canonical post. Humans are redirected. #}
+   NO rel=canonical and NO meta-refresh here - either one makes Facebook's crawler
+   scrape the main post instead and pick its hero. og:url is self-referential.
+   Humans are redirected by the script below; the crawler does not run JS. #}
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="{{ site.title }}">
 <meta property="og:title" content="{{ post.title }}">
 <meta property="og:description" content="{{ post.excerpt }}">
 <meta property="og:url" content="{{ share_url }}">
-{% for im in images %}
-<meta property="og:image" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ im.filename }}">
-<meta property="og:image:secure_url" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ im.filename }}">
+{% set im = images[0] %}
+{% set im_url = site.base_url ~ '/posts/' ~ post.slug ~ '/' ~ im.filename %}
+<meta property="og:image" content="{{ im_url }}">
+<meta property="og:image:secure_url" content="{{ im_url }}">
 {% if im.width and im.height %}<meta property="og:image:width" content="{{ im.width }}">
 <meta property="og:image:height" content="{{ im.height }}">
 {% endif %}<meta property="og:image:alt" content="{{ im.alt }}">
-{% endfor %}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ post.title }}">
 <meta name="twitter:description" content="{{ post.excerpt }}">
-{% if images %}<meta name="twitter:image" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ images[0].filename }}">{% endif %}
+<meta name="twitter:image" content="{{ im_url }}">
 
-<meta http-equiv="refresh" content="0; url={{ post_url }}">
 <script>location.replace({{ post_url | tojson }});</script>
 <style>body{font-family:Georgia,serif;max-width:32rem;margin:4rem auto;padding:0 1rem;color:#222}</style>
 </head>
