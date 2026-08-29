@@ -20,7 +20,7 @@
     "target_words": [900, 1500]
   },
   "workflow": {
-    "revision_cap": 3,
+    "revision_cap": 1,
     "letterboxd_gmail_label": "Letterboxd",
     "letterboxd_from": "robot@letterboxd.com",
     "letterboxd_subject_contains": "Letterboxd Rushes"
