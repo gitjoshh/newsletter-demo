@@ -5,6 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ post.title }} - {{ site.title }}</title>
 <meta name="description" content="{{ post.excerpt }}">
+<link rel="canonical" href="{{ site.base_url }}/posts/{{ post.slug }}/">
+
+{# Open Graph: every photo in the post is offered so the Facebook composer's
+   image picker can cycle through them. The hero is listed first (the default,
+   and what Bluesky / Threads pick since they take only the first). #}
+{% set og_imgs = [] %}
+{% if post.hero and post.hero.filename %}{% set _ = og_imgs.append(post.hero) %}{% endif %}
+{% for b in post.blurbs %}{% if b.image and b.image.filename %}{% set _ = og_imgs.append(b.image) %}{% endif %}{% endfor %}
+{% if post.deepdive.image and post.deepdive.image.filename %}{% set _ = og_imgs.append(post.deepdive.image) %}{% endif %}
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:description" content="{{ post.excerpt }}">
+<meta property="og:url" content="{{ site.base_url }}/posts/{{ post.slug }}/">
+{% for im in og_imgs %}
+<meta property="og:image" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ im.filename }}">
+<meta property="og:image:alt" content="{{ im.alt }}">
+{% endfor %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ post.title }}">
+<meta name="twitter:description" content="{{ post.excerpt }}">
+{% if og_imgs %}<meta name="twitter:image" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ og_imgs[0].filename }}">{% endif %}
+
 <style>{{ style_css }}</style>
 </head>
 <body>
