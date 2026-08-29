@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 
 from lib.common import emit, fail, load_json_config, PROJECT_CONFIG, tmp_path
-from lib.site import env, load_style
+from lib.site import env, load_style, share_key
 
 
 def teaser_text(teaser: dict, url: str) -> str:
@@ -67,7 +67,12 @@ def main() -> None:
         label = im.get("for") or {"hero": "Header image", "deepdive": "Deep-dive / mood photo"}.get(
             im.get("role", ""), im.get("role", "image").title()
         )
-        all_images.append({"label": label, "filename": fn, "url": f"{base}/{fn}"})
+        all_images.append({
+            "label": label,
+            "filename": fn,
+            "url": f"{base}/{fn}",
+            "share_url": f"{base}/share/{share_key(fn)}/",
+        })
 
     htmldoc = env().get_template("ready_email.html.j2").render(
         site=site_cfg,

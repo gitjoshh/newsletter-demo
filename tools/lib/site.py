@@ -25,6 +25,15 @@ def md(text: str | None) -> str:
     return _MD.render(text or "").strip()
 
 
+def share_key(filename: str) -> str:
+    """Stable, readable slug for a photo's Facebook share stub.
+    '02-the-odyssey-2026.jpg' -> 'the-odyssey-2026'. Must match render_ready_email."""
+    import re
+
+    stem = Path(filename).stem
+    return re.sub(r"^\d+-", "", stem) or stem
+
+
 def _img_dims(path: Path) -> tuple[int, int] | None:
     """(width, height) of an image file, or None. Facebook needs og:image:width
     / :height on every image before its link-preview picker will offer them."""
@@ -161,6 +170,28 @@ def build(repo_path: Path, site_cfg: dict | None = None) -> dict:
         (dst_post_dir / "index.html").write_text(
             render_post_page(ctx, site_cfg, style_css), encoding="utf-8"
         )
+
+        # per-photo Facebook share stubs: /posts/<slug>/share/<key>/ leads with
+        # that photo, then redirects a human to the real post
+        base_url = site_cfg.get("base_url", "").rstrip("/")
+        post_url = f"{base_url}/posts/{slug}/"
+        og_imgs = [ctx.get("hero"), *[b.get("image") for b in ctx.get("blurbs", [])],
+                   ctx.get("deepdive", {}).get("image")]
+        og_imgs = [im for im in og_imgs if im and im.get("filename")]
+        share_tpl = e.get_template("share_redirect.html.j2")
+        for lead in og_imgs:
+            key = share_key(lead["filename"])
+            ordered = [lead] + [im for im in og_imgs if im is not lead]
+            share_dir = dst_post_dir / "share" / key
+            share_dir.mkdir(parents=True, exist_ok=True)
+            (share_dir / "index.html").write_text(
+                share_tpl.render(
+                    site=site_cfg, post=ctx, images=ordered,
+                    post_url=post_url, share_url=f"{post_url}share/{key}/",
+                ),
+                encoding="utf-8",
+            )
+
         entries.append(
             {
                 "slug": slug,

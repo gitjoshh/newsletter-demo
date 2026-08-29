@@ -22,11 +22,10 @@
   teaser links the post; the film posts stand alone. Save the photo underneath
   (long-press on phone, right-click on desktop) if you want it on the post.</p>
 
-  <p style="color:#555;font-size:.9rem">On the Facebook link preview, use the left/right
-  arrows on the image to pick any of the post's photos, not just the header. If only the
-  header shows, run the post URL through
-  <a href="https://developers.facebook.com/tools/debug/">Facebook's Sharing Debugger</a>
-  once and hit &ldquo;Scrape Again&rdquo;.</p>
+  <p style="color:#555;font-size:.9rem">Facebook no longer lets you pick the link-preview
+  photo in the composer. A plain link post shows the header image. To lead with a different
+  photo, paste its <strong>share link</strong> from the list further down instead of the
+  post link &mdash; Facebook shows that photo, readers still land on the real post.</p>
 
   <p><strong>Newsletter teaser</strong></p>
   <div class="box">{{ teaser_text }}</div>
@@ -43,7 +42,16 @@
   {% endif %}
 
   {% if all_images %}
-  <h2 style="font-family:Helvetica,Arial,sans-serif;font-size:1.1rem;margin-top:2em">All photos (right-click / long-press the link to save)</h2>
+  <h2 style="font-family:Helvetica,Arial,sans-serif;font-size:1.1rem;margin-top:2em">Share links &mdash; paste one of these to lead with that photo</h2>
+  <ul>
+    {% for im in all_images %}
+    <li><strong>{{ im.label }}</strong> &mdash; <a href="{{ im.share_url }}">{{ im.share_url }}</a></li>
+    {% endfor %}
+  </ul>
+  <p class="cap">Each opens the real post for anyone who clicks. Use the plain post link
+  ({{ post_url }}) if you want the header image.</p>
+
+  <h2 style="font-family:Helvetica,Arial,sans-serif;font-size:1.1rem;margin-top:2em">Photo files (right-click / long-press to save)</h2>
   <ul>
     {% for im in all_images %}
     <li><strong>{{ im.label }}</strong> &mdash; <a href="{{ im.url }}">{{ im.filename }}</a></li>
