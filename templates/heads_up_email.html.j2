@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 640px; margin: 0 auto;
+    padding: 22px; color: #222; line-height: 1.6; }
+  h1 { font-size: 1.4rem; margin: 0 0 .3em; }
+  .sub { color: #777; margin: 0 0 1.4em; }
+  ol { padding-left: 1.3em; }
+  li { margin: .35em 0; }
+  .box { background: #f4f4f4; border: 1px solid #ddd; border-radius: 6px; padding: 14px 16px; }
+  a { color: #b5341f; }
+  .cap { color: #888; font-size: .82rem; }
+</style>
+</head>
+<body>
+  <h1>Monday heads-up &mdash; what's trending on Letterboxd</h1>
+  <p class="sub">This is the live "popular this week" ranking. Wednesday night's digest is
+    built from the same list, so this is a close preview. Watch anything here before Thursday
+    if you want to write about it from real viewing.</p>
+
+  <ol>
+    {% for f in films %}
+    <li><a href="{{ f.url }}">{{ f.title }}</a>{% if f.year %} ({{ f.year }}){% endif %}</li>
+    {% endfor %}
+  </ol>
+
+  <div class="box">
+    <strong>When Thursday's draft lands:</strong> reply with a film and your take to swap it
+    into the roundup, for example &ldquo;feature Obsession instead, I watched it Tuesday &mdash;
+    here's what I thought: ...&rdquo;. One reply with your notes, then <strong>approve</strong>.
+    <br><br>
+    The long horror deep-dive film is chosen Thursday from the actual digest, so it is not
+    locked yet. If Thursday's pick is not the one you want, say so in your reply and put some
+    substance behind it.
+    <br><br>
+    <strong>Last week's issue:</strong> if you have not posted the social copy yet, this is
+    your nudge to do it.
+  </div>
+
+  <p class="cap">Ranks shift a little between now and Wednesday, and the odd title drops in or
+    out, but the top of the list is usually stable by today.</p>
+</body>
+</html>
