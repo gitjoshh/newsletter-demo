@@ -1,14 +1,14 @@
-"""Monday heads-up: scrape Letterboxd's live "popular this week" film ranking.
+"""Monday heads-up: this week's popular films, so Josh can watch a couple before
+the Wednesday-night Rushes digest lands and write from real viewing.
 
-The Wednesday-night Rushes email is just this ranking, packaged. Pulling it on
-Monday gives Josh two or three days to actually watch something before the digest
-lands, so his takes come from real viewing.
-
-The list HTML is server-rendered behind a CSI (component) endpoint, not on the
-page shell:  /csi/films/films-browser-list/popular/this/week/
+Primary source is Letterboxd's live "popular this week" list, served behind a CSI
+(component) endpoint:  /csi/films/films-browser-list/popular/this/week/
 Each film carries  data-item-name="Title (Year)"  and  data-item-link="/film/<slug>/".
+Letterboxd sits behind Cloudflare; from a datacenter IP (the cloud routine) the
+request often gets a "Just a moment..." challenge instead of the list. When that
+happens we fall back to TMDB's trending-this-week feed (clean JSON, no challenge).
 
-Output: heads_up.json  {films:[{rank,title,year,slug,url}], ...}
+Output: heads_up.json  {source, films:[{rank,title,year,slug,url}], ...}
 With --email-out, also renders the Monday email body from heads_up_email.html.j2.
 """
 from __future__ import annotations
@@ -21,8 +21,9 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from lib.common import PROJECT_CONFIG, emit, fail, load_json_config, tmp_path
+from lib.common import PROJECT_CONFIG, emit, fail, load_env, load_json_config, tmp_path
 from lib.site import env, load_style
+from lib import tmdb
 
 CSI_URL = "https://letterboxd.com/csi/films/films-browser-list/popular/this/week/?esiAllowFilters=true"
 # Letterboxd's CSI endpoints 403 a bare bot UA; a normal browser UA + Referer is fine.
@@ -43,12 +44,14 @@ _PAIR = re.compile(
 _TITLE_YEAR = re.compile(r"^(?P<title>.+?)\s*\((?P<year>\d{4})\)\s*$")
 
 
+class ScrapeBlocked(RuntimeError):
+    """Letterboxd was unreachable (Cloudflare challenge, curl error, empty parse)."""
+
+
 def _fetch(url: str) -> str:
-    """Letterboxd sits behind Cloudflare, which fingerprints and 403s Python's
-    TLS stack ("Just a moment..."). curl gets through, so use it."""
     curl = shutil.which("curl")
     if not curl:
-        fail("curl not found on PATH (needed - Cloudflare blocks the Python HTTP client)")
+        raise ScrapeBlocked("curl not found on PATH")
     cp = subprocess.run(
         [curl, "-sS", "--compressed", "--max-time", "25",
          "-A", UA, "-H", f"Referer: {HEADERS['Referer']}",
@@ -56,9 +59,9 @@ def _fetch(url: str) -> str:
         capture_output=True, text=True,
     )
     if cp.returncode != 0:
-        fail(f"curl failed ({cp.returncode}): {cp.stderr.strip()[:300]}")
+        raise ScrapeBlocked(f"curl failed ({cp.returncode}): {cp.stderr.strip()[:200]}")
     if "Just a moment" in cp.stdout[:2000] or "cf-browser-verification" in cp.stdout[:4000]:
-        fail("Letterboxd returned a Cloudflare challenge page instead of the film list")
+        raise ScrapeBlocked("Cloudflare challenge page instead of the film list")
     return cp.stdout
 
 
@@ -85,7 +88,7 @@ def scrape(limit: int) -> list[dict]:
         if len(films) >= limit:
             break
     if not films:
-        fail("Parsed zero films from the Letterboxd CSI fragment (markup may have changed)")
+        raise ScrapeBlocked("parsed zero films from the CSI fragment (markup may have changed)")
     return films
 
 
@@ -95,9 +98,22 @@ def main() -> None:
     ap.add_argument("--out", default=None, help="Where to write heads_up.json (default .tmp/)")
     ap.add_argument("--email-out", default=None, help="Also render the Monday email body here")
     args = ap.parse_args()
+    load_env()
 
-    films = scrape(args.limit)
-    payload = {"status": "ok", "source": "letterboxd popular/this/week", "count": len(films), "films": films}
+    try:
+        films = scrape(args.limit)
+        source = "Letterboxd, popular this week"
+        source_note = ""
+    except ScrapeBlocked as e:
+        films = tmdb.trending_week(args.limit)
+        source = "TMDB, trending this week"
+        source_note = f"Letterboxd was unreachable ({e}); showing TMDB's trending list instead."
+        if not films:
+            fail(f"Letterboxd blocked ({e}) and TMDB trending fallback returned nothing"
+                 + (" [" + "; ".join(tmdb.ERRORS) + "]" if tmdb.ERRORS else ""))
+
+    payload = {"status": "ok", "source": source, "source_note": source_note,
+               "count": len(films), "films": films}
 
     out_path = Path(args.out) if args.out else tmp_path("heads_up.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -108,7 +124,8 @@ def main() -> None:
         site_cfg = load_json_config(PROJECT_CONFIG / "site.json")
         _, style_css = load_style()
         body = env().get_template("heads_up_email.html.j2").render(
-            site=site_cfg, style_css=style_css, films=films
+            site=site_cfg, style_css=style_css, films=films,
+            source=source, source_note=source_note,
         )
         email_out = Path(args.email_out)
         email_out.parent.mkdir(parents=True, exist_ok=True)

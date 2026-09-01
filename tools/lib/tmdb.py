@@ -44,6 +44,40 @@ def _enabled() -> bool:
     return bool(os.getenv("TMDB_READ_TOKEN") or os.getenv("TMDB_API_KEY"))
 
 
+def trending_week(limit: int = 12) -> list[dict]:
+    """This week's trending films from TMDB - a clean-JSON stand-in for the
+    Letterboxd popular list when that page is behind a Cloudflare challenge.
+    Returns [{rank, title, year, slug, url}, ...]; [] if TMDB is unavailable."""
+    if not _enabled():
+        _note("no TMDB credential for trending fallback")
+        return []
+    params_auth, headers = _auth()
+    try:
+        r = requests.get(f"{API}/trending/movie/week", params=params_auth,
+                         headers=headers, timeout=TIMEOUT)
+        r.raise_for_status()
+        rows = r.json().get("results", [])
+    except (requests.RequestException, ValueError) as e:
+        _note(f"trending fetch failed: {e}")
+        return []
+    out: list[dict] = []
+    for m in rows:
+        title = m.get("title") or m.get("original_title") or ""
+        if not title:
+            continue
+        rd = str(m.get("release_date") or "")
+        out.append({
+            "rank": len(out) + 1,
+            "title": title,
+            "year": int(rd[:4]) if rd[:4].isdigit() else None,
+            "slug": None,
+            "url": f"https://www.themoviedb.org/movie/{m.get('id')}",
+        })
+        if len(out) >= limit:
+            break
+    return out
+
+
 def _parse_title_year(text: str) -> tuple[str, str | None]:
     m = re.match(r"^(.*?)\s*\((\d{4})\)\s*$", text.strip())
     if m:

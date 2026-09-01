@@ -15,10 +15,11 @@
 </style>
 </head>
 <body>
-  <h1>Monday heads-up &mdash; what's trending on Letterboxd</h1>
-  <p class="sub">This is the live "popular this week" ranking. Wednesday night's digest is
-    built from the same list, so this is a close preview. Watch anything here before Thursday
-    if you want to write about it from real viewing.</p>
+  <h1>Monday heads-up &mdash; what's popular this week</h1>
+  <p class="sub">Source: {{ source | default('Letterboxd, popular this week') }}. A preview of
+    what Wednesday night's digest will likely carry, so you can watch a couple before Thursday
+    and write from real viewing.
+    {% if source_note %}<br><em>{{ source_note }}</em>{% endif %}</p>
 
   <ol>
     {% for f in films %}
