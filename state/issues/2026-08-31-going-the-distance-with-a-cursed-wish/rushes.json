@@ -1,0 +1,165 @@
+{
+  "source_subject": null,
+  "sent_date": "2026-09-02",
+  "week_of": "2026-08-31",
+  "popular_films": [
+    {
+      "title": "Coyote vs. Acme",
+      "year": "2026",
+      "slug": "coyote-vs-acme",
+      "url": "https://letterboxd.com/film/coyote-vs-acme/"
+    },
+    {
+      "title": "Spider-Man: Brand New Day",
+      "year": "2026",
+      "slug": "spider-man-brand-new-day",
+      "url": "https://letterboxd.com/film/spider-man-brand-new-day/"
+    },
+    {
+      "title": "The Odyssey",
+      "year": "2026",
+      "slug": "the-odyssey-2026",
+      "url": "https://letterboxd.com/film/the-odyssey-2026/"
+    },
+    {
+      "title": "The Dog Stars",
+      "year": "2026",
+      "slug": "the-dog-stars",
+      "url": "https://letterboxd.com/film/the-dog-stars/"
+    },
+    {
+      "title": "Obsession",
+      "year": "2025",
+      "slug": "obsession-2025",
+      "url": "https://letterboxd.com/film/obsession-2025/"
+    },
+    {
+      "title": "The Whisper Man",
+      "year": "2026",
+      "slug": "the-whisper-man",
+      "url": "https://letterboxd.com/film/the-whisper-man/"
+    }
+  ],
+  "popular_reviews": [
+    {
+      "title": "Grand Theft Auto VI: An Extended Look",
+      "year": "2026",
+      "director": null,
+      "reviewer": "ConnorEatsPants",
+      "reviewer_url": "https://letterboxd.com/connoreatspants/",
+      "rating_stars": null,
+      "rating": null,
+      "likes": 9251,
+      "comments": 66,
+      "excerpt": "Tried, but didn’t like doing crime. GTA5 required shooting police officers in the opening scene. Just couldn’t do it.",
+      "url": "https://letterboxd.com/connoreatspants/film/grand-theft-auto-vi-an-extended-look/"
+    },
+    {
+      "title": "Coyote vs. Acme",
+      "year": "2026",
+      "director": "Dave Green",
+      "reviewer": "James (Schaffrillas)",
+      "reviewer_url": "https://letterboxd.com/schaffrillas/",
+      "rating_stars": "★★★★",
+      "rating": 4.0,
+      "likes": 5504,
+      "comments": null,
+      "excerpt": "The best Albuquerque-based legal drama I've seen since...I don't know actually, I can't think of any other examples",
+      "url": "https://letterboxd.com/schaffrillas/film/coyote-vs-acme/"
+    },
+    {
+      "title": "Coyote vs. Acme",
+      "year": "2026",
+      "director": "Dave Green",
+      "reviewer": "Joe A",
+      "reviewer_url": "https://letterboxd.com/jaragon23/",
+      "rating_stars": "★★★★½",
+      "rating": 4.5,
+      "likes": 9953,
+      "comments": null,
+      "excerpt": "Basically what if Sisyphus kinda enjoyed pushing that boulder but also that boulder considered Sisyphus a friend. Legitimately incredible, effortlessly hilarious. I laughed a lot, I almost cried??? Every exec at WB who wanted to erase this movie from history should be launched into space. (Preferably on an ACME branded… read full review",
+      "url": "https://letterboxd.com/jaragon23/film/coyote-vs-acme/"
+    }
+  ],
+  "popular_lists": [
+    {
+      "title": "Letterboxd’s Top 500 Films",
+      "film_count": 500,
+      "curator": "Official Lists",
+      "curator_url": "https://letterboxd.com/official/",
+      "excerpt": "As of August 31, 2026",
+      "url": "https://letterboxd.com/official/list/letterboxds-top-500-films/",
+      "sample_films": [
+        {
+          "title": "Harakiri",
+          "year": "1962"
+        },
+        {
+          "title": "The Human Condition III: A Soldier's Prayer",
+          "year": "1961"
+        },
+        {
+          "title": "12 Angry Men",
+          "year": "1957"
+        },
+        {
+          "title": "Come and See",
+          "year": "1985"
+        }
+      ]
+    },
+    {
+      "title": "Hooptober the 13th: The Final Chapter",
+      "film_count": 35,
+      "curator": "Cinemonster",
+      "curator_url": "https://letterboxd.com/cinemonster/",
+      "excerpt": "Greetings & salutations for the first time from the Bay Area, this is Hooptober 13",
+      "url": "https://letterboxd.com/cinemonster/list/hooptober-the-13th-the-final-chapter/",
+      "sample_films": [
+        {
+          "title": "Friday the 13th Part 2",
+          "year": "1981"
+        },
+        {
+          "title": "A Nightmare on Elm Street 3: Dream Warriors",
+          "year": "1987"
+        },
+        {
+          "title": "Land of the Dead",
+          "year": "2005"
+        },
+        {
+          "title": "Don't Panic",
+          "year": "1988"
+        }
+      ]
+    },
+    {
+      "title": "MCU",
+      "film_count": 60,
+      "curator": "✨𝒜𝓇𝒾𝓃✨",
+      "curator_url": "https://letterboxd.com/arinbicer/",
+      "excerpt": "All the MCU movies and projects in order of release.",
+      "url": "https://letterboxd.com/arinbicer/list/mcu/",
+      "sample_films": [
+        {
+          "title": "Iron Man",
+          "year": "2008"
+        },
+        {
+          "title": "The Incredible Hulk",
+          "year": "2008"
+        },
+        {
+          "title": "Iron Man 2",
+          "year": "2010"
+        },
+        {
+          "title": "Thor",
+          "year": "2011"
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}

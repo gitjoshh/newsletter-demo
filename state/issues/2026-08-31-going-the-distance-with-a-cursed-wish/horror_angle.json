@@ -1,0 +1,167 @@
+{
+  "film": "Obsession",
+  "year": "2025",
+  "is_from": "popular_films",
+  "section_title": "The Wish You Can't Take Back",
+  "connection": "Curry Barker's directorial debut is a modern spin on the cursed-wish subgenre — <cite index=\"1-1\">Obsession gives chilling modern relevance to a classic tale of a wish gone wrong</cite>, in the lineage of stories where a magical bargain grants a desire but exacts a monstrous price. The horror engine of the film isn't a monster you can outrun, it's a rule: <cite index=\"3-1\">Bear calls One Wish Willow customer service and learns the wish only ends if he or Nikki dies</cite>. There's no safe word, no refund, no tapping out — <cite index=\"5-2\">Bear wants this to end, but he can't take his wish back</cite>, which turns the whole back half of the movie into a countdown with only one exit.",
+  "training_tie_in": "That's the exact psychology of a fight you can't stop mid-round: once you've made the wish — signed the contract, walked to the ring, thrown the first jab — there's no customer service line to undo it, only the bell or a body on the canvas. Every session on the bag is training for that same fact: quitting isn't actually available once the thing has started, so the only options left are absorb it or finish it. It's why the grind is unglamorous — nobody wants to be the one who has to go the full distance to make it stop.",
+  "supporting_facts": [
+    {
+      "text": "Obsession gives chilling modern relevance to a classic tale of a wish gone wrong.",
+      "url": "https://www.bfi.org.uk/sight-and-sound/reviews/obsession-curry-barker-plays-twisted-ideas-manosphere-violent-make-wish-horror"
+    },
+    {
+      "text": "Bear calls One Wish Willow customer service and learns the wish only ends if he or Nikki dies.",
+      "url": "https://movies.fandom.com/wiki/Obsession_(2025)"
+    },
+    {
+      "text": "Bear wants this to end, but he can't take his wish back.",
+      "url": "https://nofilmschool.com/obsession-ending-explained"
+    },
+    {
+      "text": "Obsession is a 2025 American supernatural psychological horror film written, directed, and edited by Curry Barker in his feature film directorial debut.",
+      "url": "https://en.wikipedia.org/wiki/Obsession_(2025_film)"
+    }
+  ],
+  "interpretation": false,
+  "candidates_considered": [
+    "The Whisper Man - genre is closer to crime/thriller with only fringe horror trappings, weaker as a pure horror angle",
+    "Coyote vs. Acme - Sisyphean punishment-loop premise is a fun echo of roadwork, but it's a comedy with no horror lineage to cite",
+    "Friday the 13th Part 2 (Hooptober list sample) - a clean endurance-chase slasher, but it's a sample film in a curated list rather than something actually in the week's popular conversation"
+  ],
+  "_model": "claude-sonnet-5",
+  "_web_sources_seen": [
+    {
+      "url": "https://www.imdb.com/title/tt11561116/",
+      "title": "The Whisper Man (2026) | Crime, Drama, Thriller"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Whisper_Man",
+      "title": "The Whisper Man"
+    },
+    {
+      "url": "https://www.avclub.com/the-whisper-man-review",
+      "title": "The Whisper Man review: Russo-produced Netflix crime sludge"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Whisper_(film)",
+      "title": "The Whisper (film)"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/In_a_Whisper_(2026_film)",
+      "title": "In a Whisper (2026 film)"
+    },
+    {
+      "url": "https://www.pluggedin.com/movie-reviews/whisper-man-2026/",
+      "title": "The Whisper Man - Plugged In Movie Review"
+    },
+    {
+      "url": "https://www.flickeringmyth.com/movie-review-the-whisper-man-2026/",
+      "title": "Movie Review – The Whisper Man (2026)"
+    },
+    {
+      "url": "https://www.imdb.com:443/name/nm1286060/news",
+      "title": "www.imdb.com"
+    },
+    {
+      "url": "https://universalstudios.fandom.com/wiki/Obsession_(2025_film)",
+      "title": "Obsession (2025 film) | Universal Studios Wiki | Fandom"
+    },
+    {
+      "url": "https://horror.fandom.com/wiki/Obsession_(2025)",
+      "title": "Obsession (2025) | Horror Film Wiki | Fandom"
+    },
+    {
+      "url": "https://www.whats-on-netflix.com/news/obsession-netflix-release-date/",
+      "title": "Horror Movie 'Obsession' Sets Fall 2026 Netflix US Release Date"
+    },
+    {
+      "url": "https://icfilmscene.org/film/obsession-2025/",
+      "title": "OBSESSION (2025) - FilmScene"
+    },
+    {
+      "url": "https://www.filmaffinity.com/us/film852705.html",
+      "title": "Obsession (2025) - Filmaffinity"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Obsession_(2025_film)",
+      "title": "Obsession (2025 film)"
+    },
+    {
+      "url": "https://www.imdb.com/title/tt37287335/",
+      "title": "Obsession (2025) ⭐ 7.4 | Horror"
+    },
+    {
+      "url": "https://letterboxd.com/film/obsession-2025/",
+      "title": "‎Obsession (2025) directed by Curry Barker • Reviews, film + cast • Letterboxd"
+    },
+    {
+      "url": "https://movies.fandom.com/wiki/Obsession_(2025)",
+      "title": "Obsession (2025) - Moviepedia - Fandom"
+    },
+    {
+      "url": "https://www.bfi.org.uk/sight-and-sound/reviews/obsession-curry-barker-plays-twisted-ideas-manosphere-violent-make-wish-horror",
+      "title": "Obsession review: Running snared | Sight and Sound"
+    },
+    {
+      "url": "https://www.flickeringmyth.com/movie-review-obsession-2025-2/",
+      "title": "Movie Review – Obsession (2025)"
+    },
+    {
+      "url": "https://www.indiewire.com/criticism/movies/obsession-review-curry-baker-1235149428/",
+      "title": "'Obsession' Review: Curry Barker Made One of 2026's Best Horror Films"
+    },
+    {
+      "url": "https://www.rottentomatoes.com/m/obsession_2025",
+      "title": "Obsession (2025) | Rotten Tomatoes"
+    },
+    {
+      "url": "https://www.nssgclub.com/en/lifestyle/45351/obsession-curry-barker-indie-horror-review-plot",
+      "title": "Obsession: Plot, Meaning and Review of Curry Barker’s Indie Horror Film - nss G-Club"
+    },
+    {
+      "url": "https://www.inverse.com/entertainment/obsession-ending-explained-curry-barker-interview",
+      "title": "'Obsession' Ending Explained: The Director Reveals What Happens To Nikki After The Curse Is Lifted"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=wmQchyauvoQ",
+      "title": "OBSESSION (2026) Ending Explained - YouTube"
+    },
+    {
+      "url": "https://nofilmschool.com/obsession-ending-explained",
+      "title": "'Obsession' Ending Explained: Who Got What They Wished For? | No Film School"
+    },
+    {
+      "url": "https://scrapsfromtheloft.com/features/obsession-2025-ending-explained/",
+      "title": "Obsession (2025) Ending Explained"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Cursed_(2025_film)",
+      "title": "The Cursed (2025 film)"
+    },
+    {
+      "url": "https://backyarddrunkard.com/movies/obsession-2026-ending-explained/",
+      "title": "Obsession (2026) Ending Explained: The Meaning of the Cursed Wish"
+    },
+    {
+      "url": "https://www.forbes.com/sites/danidiplacido/2026/05/19/the-twist-ending-of-obsession-explained/",
+      "title": "The Twist Ending Of 'Obsession,' Explained"
+    },
+    {
+      "url": "https://sportskeeda.com/pop-culture/the-incantation-ending-explained-how-li-ronan-get-rid-curse",
+      "title": "the incantation ending explained how li ronan get rid curse"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Nikki_Freeman",
+      "title": "Nikki Freeman"
+    },
+    {
+      "url": "https://www.yahoo.com/entertainment/movies/article/obsession-ending-explained-the-shocking-twist-who-dies-and-whether-a-sequel-is-coming-234315311.html",
+      "title": "'Obsession' ending explained: The shocking twist, who dies and whether a sequel is coming"
+    },
+    {
+      "url": "https://www.whatsafterthemovie.com/summary/obsession-2025",
+      "title": "Obsession (2025) - Movie Summary, Ending Explained & Themes | What's After the Movie 2026"
+    }
+  ]
+}

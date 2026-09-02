@@ -1,0 +1,20 @@
+{
+  "blog": {
+    "para1": "Some wishes don't have a cancel button.\nThis week: a coyote who never wanted to catch the roadrunner, Odysseus going the distance, and a cursed-wish horror that thinks like a fight contract.",
+    "para2": "",
+    "cta": "Read the full blog here: {url}"
+  },
+  "films": [
+    {
+      "title": "Obsession (2025)",
+      "hook": "The movie blog is live and this week it dialed customer service on a cursed wish and got put on hold.",
+      "excerpt": "There is a support line. There is presumably a hold queue. And the answer, when it finally comes, is that the only two exits from this thing are somebody's death. Not a refund, not a safe word, not a form you fill out to cancel."
+    },
+    {
+      "title": "Coyote vs. Acme (2026)",
+      "hook": "The movie blog is live and this week it found a legal drama hiding inside a Wile E. Coyote cartoon.",
+      "excerpt": "Coyote never actually catches the Roadrunner and never really wants to, not deep down. He just wants the process. That's most of my week on the bag, honestly. Nobody's handing out a trophy for a good session of mitt work. You just show up and push the boulder again tomorrow, and if you're doing it right you sort of like the boulder."
+    }
+  ],
+  "_model": "claude-sonnet-5"
+}
