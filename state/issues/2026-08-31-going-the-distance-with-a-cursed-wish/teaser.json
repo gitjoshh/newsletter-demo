@@ -1,19 +1,19 @@
 {
   "blog": {
-    "para1": "Some wishes don't have a cancel button.\nThis week: a coyote who never wanted to catch the roadrunner, Odysseus going the distance, and a cursed-wish horror that thinks like a fight contract.",
+    "para1": "A cursed wish with no refund policy. A boxing coach who won't take your vote on when the round ends. Some doors only open one way.",
     "para2": "",
-    "cta": "Read the full blog here: {url}"
+    "cta": "Read the whole thing here: {url}"
   },
   "films": [
     {
-      "title": "Obsession (2025)",
-      "hook": "The movie blog is live and this week it dialed customer service on a cursed wish and got put on hold.",
-      "excerpt": "There is a support line. There is presumably a hold queue. And the answer, when it finally comes, is that the only two exits from this thing are somebody's death. Not a refund, not a safe word, not a form you fill out to cancel."
+      "title": "Coyote vs. Acme (2026)",
+      "hook": "The movie blog is live and this week Wile E. Coyote taught me more about showing up for the grind than most training montages ever have.",
+      "excerpt": "Coyote never actually catches the Roadrunner and never really wants to, not deep down. He just wants the process. There's something in that which felt oddly familiar by the end of this particular week, showing up for the grind and quietly enjoying it despite yourself."
     },
     {
-      "title": "Coyote vs. Acme (2026)",
-      "hook": "The movie blog is live and this week it found a legal drama hiding inside a Wile E. Coyote cartoon.",
-      "excerpt": "Coyote never actually catches the Roadrunner and never really wants to, not deep down. He just wants the process. That's most of my week on the bag, honestly. Nobody's handing out a trophy for a good session of mitt work. You just show up and push the boulder again tomorrow, and if you're doing it right you sort of like the boulder."
+      "title": "Obsession (2025)",
+      "hook": "The movie blog is live and this week's deep dive is about a wish with a customer service line and no refunds, which is basically what round six feels like.",
+      "excerpt": "Bear wants this to end, but he can't take his wish back, and that single fact turns the second half of the film into a countdown with exactly one door out. Once the mitts are up and round one starts, that guy is gone. There's no line you call to renegotiate the terms."
     }
   ],
   "_model": "claude-sonnet-5"
