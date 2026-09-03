@@ -39,10 +39,13 @@ Read state/issues.json (missing = []). "Open issue" = one with status == "awaiti
 
 === STEP A: act on a reply (runs in EVERY slot EXCEPT HEADS_UP) ===
 If there is an open issue: ISSUE, id <ID>, dir D = state/issues/<ID>/ .
- 1. Read Gmail thread ISSUE.approval_thread_id. Find the newest message FROM joshhlaurie@gmail.com AFTER the most recent email I sent in that thread.
+ 1. Read Gmail thread ISSUE.approval_thread_id.
+    - If the Gmail call fails with a transient error ("service is currently unavailable", "try again", 5xx): if SLOT is a REPLY_CHECK slot other than the 8PM one ("4 12"), just print the error and STOP quietly - the next poll retries in 2h. Otherwise email me one line and STOP.
+    - Find the newest message FROM joshhlaurie@gmail.com that is one of HIS instructions - i.e. skip any message whose subject starts with "Draft:", "Revised draft:", "New photo:", "Ready to post:", "Reminder:" or contains "photo swapped" (those are pipeline emails, even though they send from his address).
     - none: print "no reply yet". If SLOT is REMINDER_1 or REMINDER_2, still send that reminder for any earlier DONE issue via STEP D. Otherwise STOP.
  2. Write its visible text (no quotes/signature) to D/reply.txt .
- 3. `python tools/classify_reply.py --thread-text D/reply.txt` -> intent: approve | personal_input | revise | unclear.
+ 3. `python tools/classify_reply.py --thread-text D/reply.txt` -> intent: approve | personal_input | revise | photo_change | unclear.
+    - If intent == photo_change AND the last state_sync note for this issue is already "photo swapped" AND this reply is that same photo request (nothing newer from him): print "photo already swapped, waiting for approve" and STOP.
  4a. approve:
    - `python tools/publish_site.py --draft D/draft.json --images D/images.json --teaser D/teaser.json --deploy wrangler --push` ; take post_url. deploy null or failed -> FAILURE.
    - `python tools/render_ready_email.py --teaser D/teaser.json --images D/images.json --url <post_url> --title "<draft.json title>"`
@@ -61,6 +64,13 @@ If there is an open issue: ISSUE, id <ID>, dir D = state/issues/<ID>/ .
    - Edit state/issues.json: revision_count = 1.
    - Reply on the SAME thread: subject "Revised draft: <title>"; body = D/preview_email.html contents; attach nothing; first line: "Reply approve to publish, or take it over from here - this routine makes one revision only."
    - `python tools/state_sync.py -m "issue <ID>: revised"` ; STOP.
+ 4c. photo_change (photo only - does NOT count against revision_count, allowed even at the cap):
+   - `python tools/fetch_images.py --draft D/draft.json --horror D/horror_angle.json --mood-count 1 --mood-query "<photo_notes>" --out-dir D/images --out D/images.json`
+     (if photo_notes is empty, omit --mood-query so it just re-rolls the current query)
+   - `python tools/build_preview.py --draft D/draft.json --images D/images.json --teaser D/teaser.json --out D/preview.html --email-out D/preview_email.html --deploy-preview`
+   - Do NOT touch revision_count.
+   - Reply on the SAME thread: subject "New photo: <title>"; body = D/preview_email.html contents; attach nothing; first line: "Photo swapped - this does not use your revision. Reply approve to publish, or ask for another photo."
+   - `python tools/state_sync.py -m "issue <ID>: photo swapped"` ; STOP.
  4d. unclear: reply on the SAME thread asking me to answer with my notes, `approve`, or to take it over. `python tools/state_sync.py -m "issue <ID>: asked for clarification"` ; STOP.
 
 If there IS an open issue and SLOT == DRAFT and there is no new reply: email me one line - "Last week's draft <title> is still awaiting your approval; this week's digest was not started." - then STOP. Do not start a new issue.

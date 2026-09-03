@@ -79,6 +79,9 @@ def main() -> None:
     ap.add_argument("--draft", required=True, help="Path to draft.json")
     ap.add_argument("--horror", default=None, help="Path to horror_angle.json (for the hero still)")
     ap.add_argument("--mood-count", type=int, default=1, help="Stock photos for the deep-dive")
+    ap.add_argument("--mood-query", default=None,
+                    help="Override the deep-dive mood-photo search (e.g. a photo_change request). "
+                         "Replaces draft.image_queries for the mood/hero-fallback photo.")
     ap.add_argument("--no-tmdb", action="store_true", help="Skip TMDB, use stock only")
     ap.add_argument("--out-dir", default=None)
     ap.add_argument("--out", default=None)
@@ -87,7 +90,7 @@ def main() -> None:
     load_env()
     draft = json.loads(Path(args.draft).read_text(encoding="utf-8"))
     horror = json.loads(Path(args.horror).read_text(encoding="utf-8")) if args.horror else {}
-    mood_queries = draft.get("image_queries", [])
+    mood_queries = [args.mood_query] if args.mood_query else draft.get("image_queries", [])
     blurbs = draft.get("film_blurbs", [])
 
     out_dir = Path(args.out_dir) if args.out_dir else tmp_path("images")
