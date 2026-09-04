@@ -9,9 +9,10 @@
    NO rel=canonical and NO meta-refresh here - either one makes Facebook's crawler
    scrape the main post instead and pick its hero. og:url is self-referential.
    Humans are redirected by the script below; the crawler does not run JS. #}
+{% set og_title = '“' ~ post.title ~ '”' ~ (' - ' ~ site.og_title_suffix if site.og_title_suffix else '') %}
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="{{ site.title }}">
-<meta property="og:title" content="{{ post.title }}">
+<meta property="og:title" content="{{ og_title }}">
 <meta property="og:description" content="{{ post.excerpt }}">
 <meta property="og:url" content="{{ share_url }}">
 {% set im = images[0] %}
@@ -22,7 +23,7 @@
 <meta property="og:image:height" content="{{ im.height }}">
 {% endif %}<meta property="og:image:alt" content="{{ im.alt }}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ post.title }}">
+<meta name="twitter:title" content="{{ og_title }}">
 <meta name="twitter:description" content="{{ post.excerpt }}">
 <meta name="twitter:image" content="{{ im_url }}">
 

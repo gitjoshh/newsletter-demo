@@ -14,9 +14,10 @@
 {% if post.hero and post.hero.filename %}{% set _ = og_imgs.append(post.hero) %}{% endif %}
 {% for b in post.blurbs %}{% if b.image and b.image.filename %}{% set _ = og_imgs.append(b.image) %}{% endif %}{% endfor %}
 {% if post.deepdive.image and post.deepdive.image.filename %}{% set _ = og_imgs.append(post.deepdive.image) %}{% endif %}
+{% set og_title = '“' ~ post.title ~ '”' ~ (' - ' ~ site.og_title_suffix if site.og_title_suffix else '') %}
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="{{ site.title }}">
-<meta property="og:title" content="{{ post.title }}">
+<meta property="og:title" content="{{ og_title }}">
 <meta property="og:description" content="{{ post.excerpt }}">
 <meta property="og:url" content="{{ site.base_url }}/posts/{{ post.slug }}/">
 {% for im in og_imgs %}
@@ -27,7 +28,7 @@
 {% endif %}<meta property="og:image:alt" content="{{ im.alt }}">
 {% endfor %}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ post.title }}">
+<meta name="twitter:title" content="{{ og_title }}">
 <meta name="twitter:description" content="{{ post.excerpt }}">
 {% if og_imgs %}<meta name="twitter:image" content="{{ site.base_url }}/posts/{{ post.slug }}/{{ og_imgs[0].filename }}">{% endif %}
 
