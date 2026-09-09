@@ -1,0 +1,20 @@
+{
+  "blog": {
+    "para1": "This week's blog runs the gamut: a coyote suing Acme, a felt monster with rot underneath, and a killer who never once raises his voice.",
+    "para2": "Plus ten years at sea, a training log disguised as obsession, and why the jab nobody claps for is the one that wins the fight.",
+    "cta": "Read the whole thing here {url}"
+  },
+  "films": [
+    {
+      "title": "Buddy (2026)",
+      "hook": "The movie blog is live and this week it got creeped on by a giant orange puppet in the worst possible way.",
+      "excerpt": "The thing is genuinely gross in a way that reminded me of sparring someone much bigger than you for the first time. You know exactly what's coming and it still gets you. The comedy and the dread are doing the same rep, over and over, until you stop laughing."
+    },
+    {
+      "title": "The Odyssey (2026)",
+      "hook": "The movie blog is live and this week Nolan turned Homer into the longest training run in cinema.",
+      "excerpt": "Matt Damon's Odysseus doesn't get a heroic sprint home, he gets a decade of attrition, and the film is more interested in the toll of the distance than in any single monster along the way. Going the distance isn't a montage. It's just a lot of unremarkable miles that happen to end somewhere that matters."
+    }
+  ],
+  "_model": "claude-sonnet-5"
+}

@@ -1,0 +1,163 @@
+{
+  "film": "The Whisper Man",
+  "year": "2026",
+  "is_from": "popular_films",
+  "section_title": "The Patience of a Predator",
+  "connection": "The Whisper Man centers on a grieving father and son who move to Featherbank, a town still haunted by a child-killer known as the Whisper Man, with lingering rumors he had an accomplice. The horror here isn't a jump-scare or a chase — it's a predator who works through walls and whispers, using patience, repetition, and proximity instead of force to close in on a traumatized child. That slow-burn, procedural dread — the sense of something testing the same weak spot over and over until it gets through — is the film's real engine.",
+  "training_tie_in": "That's the jab, not the haymaker: the patient, repetitive probing that wins rounds nobody notices, the journeyman's grind of doing the same unglamorous thing over and over until a gap finally opens. It's also the corner's discipline — sitting with dread you can't punch your way out of, round after round, because the fight won't let you stop and check the exits.",
+  "supporting_facts": [
+    {
+      "text": "A grieving father and his young son relocate to the quiet town of Featherbank, which was terrorized by a serial killer known as The Whisper Man 15 years earlier, while rumors circulated that Whisper Man worked with an accomplice.",
+      "url": "https://www.imdb.com/title/tt11561116/"
+    }
+  ],
+  "interpretation": false,
+  "candidates_considered": [
+    "Buddy - review reads as a monster-comedy riff on a beloved children's-show figure; strong genre potential but no verifiable plot facts to ground the angle this week.",
+    "Obsession - title suggests thriller/horror overlap but no confirmed details on subgenre or content to support a specific claim.",
+    "Harakiri - the Top 500 list entry has real endurance/suffering themes (ritual seppuku, institutional cruelty) but it's not horror; would require pure interpretation and a strong horror candidate exists this week."
+  ],
+  "_model": "claude-sonnet-5",
+  "_web_sources_seen": [
+    {
+      "url": "https://www.imdb.com/title/tt11561116/",
+      "title": "The Whisper Man (2026) | Crime, Drama, Thriller"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/The_Whisper_Man",
+      "title": "The Whisper Man"
+    },
+    {
+      "url": "https://culturecrypt.com/movie-reviews/the-whisper-man-2026",
+      "title": "THE WHISPER MAN (2026) — CULTURE CRYPT"
+    },
+    {
+      "url": "https://www.rottentomatoes.com/m/the_whisper_man",
+      "title": "The Whisper Man | Rotten Tomatoes"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/In_a_Whisper_(2026_film)",
+      "title": "In a Whisper (2026 film)"
+    },
+    {
+      "url": "https://www.horrormoviespov.com/the-whisper-man-2026-review-a-dark-serial-killer-thriller-with-plenty-of-creepy-ideas/",
+      "title": "The Whisper Man (2026) Review: A Dark Serial Killer Thriller With Plenty of Creepy Ideas - Horror Movies POV"
+    },
+    {
+      "url": "https://pro.imdb.com/title/tt35680929",
+      "title": "Whispers's primary photo"
+    },
+    {
+      "url": "https://www.imdb.com:443/name/nm1286060/news",
+      "title": "www.imdb.com"
+    },
+    {
+      "url": "https://letterboxd.com/film/buddy-2026/",
+      "title": "Buddy (2026) directed by Casper Kelly • Reviews, film + cast"
+    },
+    {
+      "url": "https://buddy-2026-film.fandom.com/wiki/Buddy_(2026_film)",
+      "title": "Buddy (2026 film) Wiki Buddy (2026 film) Wiki - Fandom"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Buddy_(2026_film)",
+      "title": "Buddy (2026 film)"
+    },
+    {
+      "url": "https://www.rogerebert.com/reviews/buddy-horror-movie-review-2026",
+      "title": "Buddy review: Casper Kelly's kid's-show horror film has the correct number of cooks"
+    },
+    {
+      "url": "https://www.imdb.com/title/tt37281055/",
+      "title": "Buddy (2026) ⭐ 7.6 | Horror, Sci-Fi"
+    },
+    {
+      "url": "https://www.indiewire.com/news/trailers/buddy-trailer-casper-kelly-horror-movie-1235204302/",
+      "title": "'Buddy' Trailer: Casper Kelly Horror Movie"
+    },
+    {
+      "url": "https://www.sundance.org/blogs/buddy-turns-childhood-comfort-into-midnight-terror/",
+      "title": "“Buddy” Turns Childhood Comfort into Midnight Terror - sundance.org"
+    },
+    {
+      "url": "https://www.rottentomatoes.com/m/buddy_2026",
+      "title": "Buddy (2026) | Rotten Tomatoes"
+    },
+    {
+      "url": "https://guides.justwatch.com/us/buddy-casper-kelly-new-film",
+      "title": "What Is Buddy, The New Horror Film By Casper Kelly?"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Casper_Kelly",
+      "title": "Casper Kelly"
+    },
+    {
+      "url": "https://universalstudios.fandom.com/wiki/Obsession_(2025_film)",
+      "title": "Obsession (2025 film) | Universal Studios Wiki | Fandom"
+    },
+    {
+      "url": "https://horror.fandom.com/wiki/Obsession_(2025)",
+      "title": "Obsession (2025) | Horror Film Wiki | Fandom"
+    },
+    {
+      "url": "https://www.whats-on-netflix.com/news/obsession-netflix-release-date/",
+      "title": "Horror Movie 'Obsession' Sets Fall 2026 Netflix US Release Date"
+    },
+    {
+      "url": "https://icfilmscene.org/film/obsession-2025/",
+      "title": "OBSESSION (2025) - FilmScene"
+    },
+    {
+      "url": "https://www.imdb.com/title/tt37287335/",
+      "title": "Obsession (2025) ⭐ 7.4 | Horror"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Obsession_(2025_film)",
+      "title": "Obsession (2025 film)"
+    },
+    {
+      "url": "https://www.indiewire.com/criticism/movies/obsession-review-curry-baker-1235149428/",
+      "title": "'Obsession' Review: Curry Barker Made One of 2026's Best Horror Films"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Dark_Obsession_(2023_film)",
+      "title": "Dark Obsession (2023 film)"
+    },
+    {
+      "url": "https://archive.org/details/harakiri-1962_202510",
+      "title": "Harakiri (1962) : Masaki Kobayashi : Free Download, Borrow, and Streaming : Internet Archive"
+    },
+    {
+      "url": "https://medium.com/@taaninokao/seppuku-1962-lessons-that-i-learnt-from-masaki-kobayashis-masterpiece-0e57d375d7f5",
+      "title": "Harakiri (Seppuku) 1962: Lessons That I learnt From Masaki Kobayashi’s Masterpiece | by Bunga, A. | Medium"
+    },
+    {
+      "url": "https://harvardfilmarchive.org/programs/the-shochiku-centennial-collection-3",
+      "title": "Harakiri - Harvard Film Archive"
+    },
+    {
+      "url": "https://letterboxd.com/film/harakiri/",
+      "title": "Harakiri (1962) - Masaki Kobayashi"
+    },
+    {
+      "url": "https://www.imdb.com/title/tt0056058/",
+      "title": "Harakiri (1962) ⭐ 8.6 | Drama, Mystery"
+    },
+    {
+      "url": "https://thequietus.com/culture/film/film-harakiri-masaki-kobayashi-60-anniversary/",
+      "title": "Against The Tides: 60 Years Of Kobayashi's Brutal Harakiri | The Quietus"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Harakiri_(1962_film)",
+      "title": "Harakiri (1962 film)"
+    },
+    {
+      "url": "https://www.jcablog.com/post/harakiri-film-review",
+      "title": "Harakiri (Seppuku) 1962 | Review & Analysis | JCA"
+    },
+    {
+      "url": "https://michellekisner.substack.com/p/harakiri-1962-ca1",
+      "title": "Harakiri (1962)"
+    }
+  ]
+}
