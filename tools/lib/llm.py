@@ -16,7 +16,7 @@ import re
 from lib.common import fail, load_env
 
 load_env()
-MODEL = os.getenv("ANTHROPIC_MODEL", "claude-opus-5")
+MODEL = os.getenv("ANTHROPIC_MODEL", "claude-haiku-5-5")
 
 # Server tool version for web search. Opus 5 / Sonnet 5 support the dynamic-filter
 # variant; older models/accounts need web_search_20250305. Override via env if the
@@ -66,6 +66,75 @@ def _client():
         )
 
 
+# Backend selection. "claude_cli" runs `claude -p` (Claude Code CLI), which bills
+# the logged-in Claude subscription (Pro/Max) instead of a pay-per-token API key.
+# "api" is the original Anthropic Messages API path (needs ANTHROPIC_API_KEY).
+BACKEND = os.getenv("LLM_BACKEND", "claude_cli").strip().lower()
+
+# Env vars that would make the CLI bill an API key instead of the subscription.
+_API_CRED_VARS = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+                  "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_USE_VERTEX")
+_WIN_ARG_BUDGET = 20000  # stay well under the Windows 32k command-line limit
+
+
+def _complete_cli(system: str, user: str, *, web_search: bool, max_web_uses: int,
+                  effort: str | None) -> dict:
+    """One-shot completion through the Claude Code CLI on the subscription login."""
+    import shutil
+    import subprocess
+    import tempfile
+
+    exe = shutil.which("claude") or shutil.which("claude.cmd")
+    if not exe:
+        fail("Claude Code CLI not found on PATH (needed for LLM_BACKEND=claude_cli)")
+
+    env = {k: v for k, v in os.environ.items() if k not in _API_CRED_VARS}
+    prompt = user
+    if web_search:
+        prompt += (f"\n\n(You may use WebSearch up to {max_web_uses} times. Put every URL "
+                   "you rely on into the JSON as the schema asks.)")
+    # Agentic CLI runs (esp. with web search) drift from the output schema; restate it last.
+    schema_at = max(system.rfind("Respond with"), system.rfind("Return ONLY"), system.rfind("Output ONLY"), system.rfind("Return a ```json"))
+    if schema_at >= 0:
+        prompt += ("\n\nFINAL OUTPUT RULE: your final reply must be ONLY the JSON described "
+                   "below, with exactly those keys, inside one ```json fenced block. No prose "
+                   "before or after it.\n\n" + system[schema_at:])
+    cmd = [exe, "-p", "--model", MODEL, "--output-format", "json",
+           "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands",
+           "--setting-sources", ""]
+    if web_search:
+        cmd += ["--tools", "WebSearch", "--allowedTools", "WebSearch"]
+    else:
+        cmd += ["--tools", ""]
+    if effort:
+        cmd += ["--effort", effort]
+    if len(system) <= _WIN_ARG_BUDGET:
+        cmd += ["--system-prompt", system]
+    else:  # too long for argv on Windows: carry it in the prompt instead
+        cmd += ["--system-prompt", "Follow the INSTRUCTIONS block exactly."]
+        prompt = f"<INSTRUCTIONS>\n{system}\n</INSTRUCTIONS>\n\n{prompt}"
+
+    # Neutral cwd so the repo's CLAUDE.md (operator contract) is not auto-loaded.
+    with tempfile.TemporaryDirectory(prefix="rfyl-llm-") as cwd:
+        try:
+            proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True,
+                                  encoding="utf-8", errors="replace", env=env, cwd=cwd,
+                                  timeout=int(os.getenv("LLM_TIMEOUT_S", "900")))
+        except subprocess.TimeoutExpired:
+            fail("Claude CLI timed out")
+    out = (proc.stdout or "").strip()
+    try:
+        data = json.loads(out[out.find("{"):]) if "{" in out else {}
+    except json.JSONDecodeError:
+        data = {}
+    if proc.returncode != 0 or not data or data.get("is_error"):
+        detail = data.get("result") or (proc.stderr or out)[-800:]
+        fail(f"Claude CLI call failed (exit {proc.returncode}): {detail}")
+    models = list((data.get("modelUsage") or {}).keys())
+    return {"text": (data.get("result") or "").strip(), "sources": [],
+            "stop_reason": data.get("stop_reason"), "models": models}
+
+
 def complete(
     system: str,
     user: str,
@@ -76,15 +145,19 @@ def complete(
     effort: str | None = None,
     no_thinking: bool = False,
 ) -> dict:
-    """Run one Messages request. Returns {text, sources, stop_reason}.
+    """Run one completion. Returns {text, sources, stop_reason}.
 
     `sources` is a de-duplicated list of {url, title} harvested from any
-    web_search results, so callers can cross-check the model's citations.
+    web_search results (API backend only), so callers can cross-check the
+    model's citations.
 
     `no_thinking=True` disables adaptive thinking - use it for pure JSON
     extraction so thinking tokens don't eat into `max_tokens` and truncate
     the output.
     """
+    if BACKEND == "claude_cli":
+        return _complete_cli(system, user, web_search=web_search,
+                             max_web_uses=max_web_uses, effort=effort)
     client = _client()
 
     kwargs: dict = {

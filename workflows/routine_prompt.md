@@ -1,3 +1,5 @@
+> **RETIRED 2026-10-10.** Both cloud routines are disabled (not deleted). The loop now runs in Hermes: see `workflows/penny_telegram_loop.md`.
+
 # Deployed routine prompt (reference copy)
 
 The live orchestration prompt runs on **two Claude Code cloud routines**, both on
