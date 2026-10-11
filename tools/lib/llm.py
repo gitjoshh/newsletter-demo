@@ -135,6 +135,55 @@ def _complete_cli(system: str, user: str, *, web_search: bool, max_web_uses: int
             "stop_reason": data.get("stop_reason"), "models": models}
 
 
+def _complete_hermes(system: str, user: str, *, web_search: bool, max_web_uses: int,
+                     effort: str | None) -> dict:
+    """One-shot completion through `hermes chat` (ChatGPT subscription via openai-codex).
+
+    LLM_BACKEND=hermes_cli. Model/provider from HERMES_LLM_MODEL / HERMES_LLM_PROVIDER
+    (default gpt-5.6-terra / openai-codex). Hermes' own fallback chain applies on failure.
+    """
+    import shutil
+    import subprocess
+    import tempfile
+
+    exe = shutil.which("hermes") or os.path.expanduser("~/.local/bin/hermes")
+    prompt = f"<INSTRUCTIONS>\n{system}\n</INSTRUCTIONS>\n\n{user}"
+    if web_search:
+        prompt += (f"\n\n(You may use web search up to {max_web_uses} times. Put every URL "
+                   "you rely on into the JSON as the schema asks.)")
+    schema_at = max(system.rfind("Respond with"), system.rfind("Return ONLY"),
+                    system.rfind("Output ONLY"), system.rfind("Return a ```json"))
+    if schema_at >= 0:
+        prompt += ("\n\nFINAL OUTPUT RULE: your final reply must be ONLY the JSON described "
+                   "below, with exactly those keys, inside one ```json fenced block. No prose "
+                   "before or after it.\n\n" + system[schema_at:])
+    model = os.getenv("HERMES_LLM_MODEL", "gpt-5.6-terra")
+    provider = os.getenv("HERMES_LLM_PROVIDER", "openai-codex")
+    with tempfile.TemporaryDirectory(prefix="rfyl-llm-") as cwd:
+        qf = os.path.join(cwd, "prompt.txt")
+        with open(qf, "w", encoding="utf-8") as f:
+            f.write(prompt)
+        cmd = [exe, "chat", "-Q", "--oneshot", "--query-file", qf, "--provider", provider,
+               "-m", model, "--ignore-rules", "--source", "rfyl", "--max-turns",
+               str(max_web_uses + 3 if web_search else 2),
+               "-t", "web" if web_search else "todo"]
+        if effort:
+            cmd += ["--reasoning", effort]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                                  errors="replace", cwd=cwd,
+                                  timeout=int(os.getenv("LLM_TIMEOUT_S", "900")))
+        except subprocess.TimeoutExpired:
+            fail("hermes chat timed out")
+    out = "\n".join(l for l in (proc.stdout or "").splitlines()
+                    if not l.strip().startswith("session_id:")).strip()
+    if proc.returncode != 0 or not out:
+        fail(f"hermes chat failed (exit {proc.returncode}): {((proc.stderr or '') + out)[-800:]}")
+    urls = sorted(set(re.findall(r"https?://[^\s\)\]\"'>,`]+", out)))
+    return {"text": out, "sources": [{"url": u, "title": ""} for u in urls],
+            "stop_reason": "end_turn", "models": [f"{provider}/{model}"]}
+
+
 def complete(
     system: str,
     user: str,
@@ -155,6 +204,9 @@ def complete(
     extraction so thinking tokens don't eat into `max_tokens` and truncate
     the output.
     """
+    if BACKEND == "hermes_cli":
+        return _complete_hermes(system, user, web_search=web_search,
+                                max_web_uses=max_web_uses, effort=effort)
     if BACKEND == "claude_cli":
         return _complete_cli(system, user, web_search=web_search,
                              max_web_uses=max_web_uses, effort=effort)

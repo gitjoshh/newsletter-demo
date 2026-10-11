@@ -6,7 +6,7 @@ Penny (the Hermes gateway agent) runs these tools when Josh replies.
 
 ## Billing
 - Every LLM call inside `tools/` goes through `tools/lib/llm.py` with
-  `LLM_BACKEND=claude_cli` and `ANTHROPIC_MODEL=claude-haiku-5-5` (`.env`). That
+  `LLM_BACKEND=hermes_cli` (ChatGPT gpt-5.6-terra via `hermes chat`, set by HERMES_LLM_MODEL) in `.env`. Old: claude_cli. That
   shells out to the Claude Code CLI (`claude -p`), so it uses Josh's **Claude
   subscription** login, not an API key. The wrapper strips `ANTHROPIC_API_KEY`
   from the child env so it cannot silently bill the API.
